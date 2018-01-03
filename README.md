@@ -14,7 +14,7 @@ docker run --name ojs \
            -d lucasdiedrich/ojs
 ```
 
-Now just access 127.0.0.1/index/install and continue to web installation and finish your install and configs. To install automatically when the container init you can use **OJS_CLI_INSTALL=1**, and use the others environment variables to automatize the process.
+Now just access 127.0.0.1/index/install and continue trough web installation and finish your install and configs. To install automatically when the container init you can use **OJS_CLI_INSTALL=1**, and use the others environment variables to automatize the process.
 
 ### Environment Variables
 
