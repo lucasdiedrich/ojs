@@ -1,0 +1,18 @@
+#!/bin/sh
+
+ojs-pre-start
+
+# Start the cron service in the background.
+/usr/sbin/crond -f &
+echo "[OJS Start] Started cron"
+
+# Run the apache process in the foreground as in the php image
+/usr/sbin/httpd -f /etc/apache2/httpd.conf -DFOREGROUND
+echo "[OJS Start] Started apache..."
+
+tail -f /var/log/apache2/access.log &
+
+if [[ ${OJS_CLI_INSTALL} == "1" ]] &&
+    grep -q 'installed = Off' $OJS_CONF ; then
+    ojs-cli-install
+fi

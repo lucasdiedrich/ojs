@@ -1,0 +1,28 @@
+version: "3.3"
+services:
+  mysql-ojs:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ojs
+      MYSQL_DATABASE: ojs
+      MYSQL_USER: ojs
+      MYSQL_PASSWORD: ojs
+  pkp-ojs:
+    image: pkp-ojs-alpine
+    container_name : pkp-ojs
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/volumes/ojs/files:/var/www/html/files"
+      - "/etc/localtime:/etc/localtime"
+      - "/volumes/ojs/config.inc.php:/var/www/html/config.inc.php"
+    environment:
+      SERVERNAME: 'myserver.mydomain'
+      OJS_CLI_INSTALL: 1
+      OJS_DB_HOST: 'mysql-ojs'
+    depends_on: 
+     - mysql-ojs
+    restart: always
