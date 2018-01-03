@@ -9,8 +9,8 @@ services:
       MYSQL_USER: ojs
       MYSQL_PASSWORD: ojs
   pkp-ojs:
-    image: pkp-ojs-alpine
-    container_name : pkp-ojs
+    image: lucasdiedrich/ojs
+    container_name : ojs
     restart: always
     ports:
       - "80:80"
