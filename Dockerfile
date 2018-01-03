@@ -4,10 +4,6 @@ LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
 
 WORKDIR /var/www/html
 
-COPY files/ojs.conf $OJS_WEB_CONF
-COPY files/php.ini /etc/php5/conf.d/0-ojs.ini
-COPY files/bin/* /usr/local/bin/
-
 ENV COMPOSER_ALLOW_SUPERUSER=1  \
     SERVERNAME="localhost"      \
     OJS_VERSION="ojs-3_1_0-1"   \
@@ -137,6 +133,10 @@ RUN apk add --update --no-cache $PACKAGES && \
     # Clear the image
     apk del --no-cache nodejs git && rm -rf $EXCLUDE && \
     find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
+
+COPY files/ojs.conf $OJS_WEB_CONF
+COPY files/php.ini /etc/php5/conf.d/0-ojs.ini
+COPY files/bin/* /usr/local/bin/
 
 EXPOSE 80 443
 
