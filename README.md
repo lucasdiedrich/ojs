@@ -11,10 +11,12 @@ docker run --name ojs \
            -p 80:80 -p 443:443 \
            -e SERVERNAME=... \
            -v /etc/localtime:/etc/localtime \
-           -d lucasdiedrich/ojs
+           -d lucasdiedrich/ojs:latest
 ```
 
 Now just access 127.0.0.1/index/install and continue trough web installation and finish your install and configs. To install automatically when the container init you can use **OJS_CLI_INSTALL=1**, and use the others environment variables to automatize the process.
+
+All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/lucasdiedrich/ojs/tags/).
 
 ### Environment Variables
 
