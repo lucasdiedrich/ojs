@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.8
 
 LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
 
@@ -6,7 +6,7 @@ WORKDIR /var/www/html
 
 ENV COMPOSER_ALLOW_SUPERUSER=1  \
     SERVERNAME="localhost"      \
-    OJS_VERSION="ojs-3_1_0-1"   \
+    OJS_VERSION="ojs-3_1_1-2"   \
     OJS_CLI_INSTALL="0"         \
     OJS_DB_HOST="localhost"     \
     OJS_DB_USER="ojs"           \
