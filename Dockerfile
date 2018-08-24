@@ -14,7 +14,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1  \
     OJS_DB_NAME="ojs"           \
     OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf" \
     OJS_CONF="/var/www/html/config.inc.php" \
-    PACKAGES="dcron apache2 apache2-ssl apache2-utils php5 php5-fpm php5-cli php5-apache2 php5-zlib \
+    PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils php5 php5-fpm php5-cli php5-apache2 php5-zlib \
              php5-json php5-phar php5-openssl php5-mysql php5-curl php5-mcrypt php5-pdo_mysql php5-ctype \
              php5-gd php5-xml php5-dom php5-iconv curl nodejs git" \
     EXCLUDE="dbscripts/xml/data/locale/en_US/sample.xml     \
@@ -122,7 +122,7 @@ RUN apk add --update --no-cache $PACKAGES && \
     composer install -d plugins/generic/citationStyleLanguage --no-dev && \
     npm install -y && npm run build && \
     # Create directories
-    mkdir /var/www/html/files /run/apache2 && \
+    mkdir -p /var/www/html/files /run/apache2  /run/supervisord/ && \
     cp config.TEMPLATE.inc.php config.inc.php && \
     chown -R apache:apache /var/www/* && \
     # Prepare crontab
@@ -137,9 +137,10 @@ RUN apk add --update --no-cache $PACKAGES && \
 COPY files/ojs.conf $OJS_WEB_CONF
 COPY files/php.ini /etc/php5/conf.d/0-ojs.ini
 COPY files/bin/* /usr/local/bin/
+COPY files/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 80 443
 
 VOLUME [ "/var/www/html/files", "/var/www/html/public" ]
 
-CMD ["/bin/sh", "/usr/local/bin/ojs-start"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
