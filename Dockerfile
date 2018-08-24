@@ -134,10 +134,7 @@ RUN apk add --update --no-cache $PACKAGES && \
     apk del --no-cache nodejs git && rm -rf $EXCLUDE && \
     find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
 
-COPY files/ojs.conf $OJS_WEB_CONF
-COPY files/php.ini /etc/php5/conf.d/0-ojs.ini
-COPY files/bin/* /usr/local/bin/
-COPY files/supervisord.conf /etc/supervisord.conf
+COPY files/ /
 
 EXPOSE 80 443
 
