@@ -41,6 +41,9 @@ All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/
 | /var/www/html/config.inc.php  | If not provided a new one will be created |
 | /etc/ssl/apache2/server.pem  | SSL **crt** certificate |
 | /etc/ssl/apache2/server.key  | SSL **key** certificate |
+| /var/log/apache2  | Apache2 Logs |
+| /var/www/html/.htaccess  | Apache2 HTAccess |
+| /usr/local/etc/php/conf.d/custom.ini  | PHP5 custom.init |
 | /etc/localtime  | To set container clock as the host clock |
 
 ## Upgrading OJS

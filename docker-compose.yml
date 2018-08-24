@@ -15,10 +15,14 @@ services:
     ports:
       - "8080:80"
       - "8443:443"
-    volumes:
-      - "/volumes/ojs/files:/var/www/html/files"
-      - "/etc/localtime:/etc/localtime"
-      - "/volumes/ojs/config.inc.php:/var/www/html/config.inc.php"
+   volumes:
+     - /etc/localtime:/etc/localtime             # to sync the container clock with localhost.
+     - ./files/private:/var/www/files            # ojs' private files
+     - ./files/public:/var/www/html/public       # ojs' public files
+     - ./files/logs:/var/log/apache2             # apache logs
+     - ./config/ojs.config.inc.php:/var/www/html/config.inc.php      # ojs' config
+     - ./config/apache.htaccess:/var/www/html/.htaccess              # ojs' htaccess
+     - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini  # php config      
     environment:
       SERVERNAME: 'myserver.mydomain'
       OJS_CLI_INSTALL: 1
