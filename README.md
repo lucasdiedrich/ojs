@@ -8,7 +8,7 @@ This container was built based on [buildpkg.sh](https://github.com/pkp/ojs/blob/
 
 ```bash
 docker run --name ojs \
-           -p 80:80 -p 443:443 \
+           -p 8080:80 -p 8443:443 \
            -e SERVERNAME=... \
            -v /etc/localtime:/etc/localtime \
            -d lucasdiedrich/ojs
