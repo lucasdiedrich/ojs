@@ -13,8 +13,8 @@ services:
     container_name : ojs
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - "8080:80"
+      - "8443:443"
     volumes:
       - "/volumes/ojs/files:/var/www/html/files"
       - "/etc/localtime:/etc/localtime"
@@ -25,4 +25,11 @@ services:
       OJS_DB_HOST: 'mysql-ojs'
     depends_on: 
      - mysql-ojs
-    restart: always
+    # labels:
+      # - traefik.backend=ojs
+      # - traefik.frontend.rule=Host:myserver.mydomain
+      # - traefik.docker.network=proxy
+      # - traefik.port=8080
+    # networks:
+      # - internal
+      # - proxy
