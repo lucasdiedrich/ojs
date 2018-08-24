@@ -1,7 +1,8 @@
 version: "3.3"
 services:
   mysql-ojs:
-    image: mysql
+    image: mysql:latest
+    container_name: mysql-ojs
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ojs
@@ -9,8 +10,8 @@ services:
       MYSQL_USER: ojs
       MYSQL_PASSWORD: ojs
   pkp-ojs:
-    image: lucasdiedrich/ojs
-    container_name : ojs
+    image: lucasdiedrich/ojs:latest
+    container_name : pkp-ojs
     restart: always
     ports:
       - "8080:80"
