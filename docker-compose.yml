@@ -16,7 +16,7 @@ services:
     ports:
       - "8080:80"
       - "8443:443"
-   volumes:
+  volumes:
      - /etc/localtime:/etc/localtime             # to sync the container clock with localhost.
      - ./files/private:/var/www/files            # ojs' private files
      - ./files/public:/var/www/html/public       # ojs' public files
