@@ -1,54 +1,51 @@
-version: "3.5"             # MBR: Why not upgrade to 3.5
+version: "3.6"             
 services:
-  db:                      # DB can be mysql, mariadb, postgre... what about a generic name? And simplest is the better.
-    image: mariadb:10.2    # MBR: mariadb is the recommended. What about adding versions? You don't want an autoupgrade in production...
-    env_file:              # MBR: IFAIK the .env file is a best practice. A centralized file will be easier to modify by dojo or migrate to consul, or whatever. It's also great to keep differences between dev and production. BTW, the .env file also need to be created (with default values) in your project's root.
+  db:                      
+    image: mariadb:10.2    
+    env_file:
       - .env
-    container_name: ${COMPOSE_PROJECT_NAME:ojs}_db  # MBR: Container name as a .env variable? Is a good idea setting the default value here.
+    container_name: ${COMPOSE_PROJECT_NAME:ojs}_db 
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:root} # Variables from .env with default values.
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:root}
       MYSQL_DATABASE: ${MYSQL_DATABASE:ojs}
       MYSQL_USER: ${MYSQL_USER:ojs}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:ojs}
-  ojs:                     # Simplest, the better.
-    image: lucasdiedrich/ojs:latest    # MBR: What about including version instead of latest? I didn't modify because your version and pkp's don't fit.
-    env_file:             # MBR: Explained before.
+  ojs:                    
+    image: lucasdiedrich/ojs:latest   
+    env_file:            
       - .env
     container_name: ${COMPOSE_PROJECT_NAME:pkp}_ojs
-    hostname: ${COMPOSE_PROJECT_NAME:pkp_ojs}  # MBR: Adding hostname.
+    hostname: ${COMPOSE_PROJECT_NAME:pkp_ojs} 
     restart: always
     ports:
-      - "${HTTP_PORT:8081}:80"         # MBR: Lots of apps user 8080 port by default and it will collide. What about 8081?
+      - "${HTTP_PORT:8081}:80" 
       - "${HTTPS_PORT:8443}:443"
   volumes:
-     - /etc/localtime:/etc/localtime             # to sync the container clock with localhost.
-     - ./files/private:/var/www/files            # ojs' private files
-     - ./files/public:/var/www/html/public       # ojs' public files
-     - ./files/logs:/var/log/apache2             # apache logs
-     - ./config/ojs.config.inc.php:/var/www/html/config.inc.php      # ojs' config
-     - ./config/apache.htaccess:/var/www/html/.htaccess              # ojs' htaccess
-     - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini  # php config      
+     - /etc/localtime:/etc/localtime           
+     - ./files/private:/var/www/files       
+     - ./files/public:/var/www/html/public  
+     - ./files/logs:/var/log/apache2   
+     - ./config/ojs.config.inc.php:/var/www/html/config.inc.php  
+     - ./config/apache.htaccess:/var/www/html/.htaccess        
+     - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       SERVERNAME: ${PROJECT_DOMAIN:myserver.mydomain}
       OJS_CLI_INSTALL: 1
-      OJS_DB_HOST: 'db'                 # MBR: For consistency.
+      OJS_DB_HOST: 'db'
     depends_on: 
      - db
     # labels:
-      # - traefik.backend=${COMPOSE_PROJECT_NAME:pkp}_ojs
       # - traefik.frontend.rule=Host:${PROJECT_DOMAIN:myserver.mydomain}
       # - traefik.docker.network=proxy
-      # - traefik.port=80               # MBR: This is the port taefik is listening, not ojs's docker, so need to be 80.
-      # - traefik.enable=true           # MBR: Keep the variable but commented.
+      # - traefik.port=80   
+      # - traefik.enable=true 
     # networks:
-      # - internal                      # MBR: Better "internal" instead of "inside". ;-)
-      # - proxy                         # MBR: You are right. Better "proxy" than traefik... as in dababase, better keep it abstract.
-
-
-# MBR: Why not adding an adminer, commented by default? 
-# Ir really usefull when you need to fix stuff in your ojs.
-
+      # - internal 
+      # - proxy
+      
+# Adminer
+# Usefull when you need to fix stuff in your ojs.
 #  adminer:
 #    image: adminer
 #    ports:
