@@ -2,8 +2,8 @@ version: "3.6"
 services:
   db:                      
     image: mariadb:10.2    
-    env_file:
-      - .env
+    #env_file:
+    #  - .env
     container_name: ${COMPOSE_PROJECT_NAME:ojs}_db 
     restart: always
     environment:
@@ -13,8 +13,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:ojs}
   ojs:                    
     image: lucasdiedrich/ojs:latest   
-    env_file:            
-      - .env
+    #env_file:            
+    #  - .env
     container_name: ${COMPOSE_PROJECT_NAME:pkp}_ojs
     hostname: ${COMPOSE_PROJECT_NAME:pkp_ojs} 
     restart: always
