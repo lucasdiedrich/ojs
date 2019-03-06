@@ -9,16 +9,25 @@ services:
       MYSQL_DATABASE: ojs
       MYSQL_USER: ojs
       MYSQL_PASSWORD: ojs
+    networks:
+      - net
 
   ojs:                    
     image: lucasdiedrich/ojs:latest   
     restart: always
     ports:
-      - "8080:80" 
-      - "8443:443"
+      - 8080:80 
+      - 8443:443
     environment:
       SERVERNAME: 'myserver.mydomain'
       OJS_CLI_INSTALL: 1
       OJS_DB_HOST: 'db'
     depends_on: 
      - db
+    networks:
+     - net
+      
+networks:
+  net:
+    driver: overlay
+    
