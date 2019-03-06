@@ -1,56 +1,24 @@
-version: "3.6"             
+version: '3.7'            
 services:
+  
   db:                      
     image: mariadb:10.2    
-    #env_file:
-    #  - .env
-    container_name: ${COMPOSE_PROJECT_NAME:ojs}_db 
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:ojs}
-      MYSQL_USER: ${MYSQL_USER:ojs}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:ojs}
+    #environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ojs
+      MYSQL_USER: ojs
+      MYSQL_PASSWORD: ojs
+
   ojs:                    
     image: lucasdiedrich/ojs:latest   
-    #env_file:            
-    #  - .env
-    container_name: ${COMPOSE_PROJECT_NAME:pkp}_ojs
-    hostname: ${COMPOSE_PROJECT_NAME:pkp_ojs} 
     restart: always
     ports:
-      - "${HTTP_PORT:8081}:80" 
-      - "${HTTPS_PORT:8443}:443"
-  volumes:
-     - /etc/localtime:/etc/localtime           
-     - ./files/private:/var/www/files       
-     - ./files/public:/var/www/html/public  
-     - ./files/logs:/var/log/apache2   
-     - ./config/ojs.config.inc.php:/var/www/html/config.inc.php  
-     - ./config/apache.htaccess:/var/www/html/.htaccess        
-     - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - "8080:80" 
+      - "8443:443"
     environment:
-      SERVERNAME: ${PROJECT_DOMAIN:myserver.mydomain}
+      SERVERNAME: 'myserver.mydomain'
       OJS_CLI_INSTALL: 1
       OJS_DB_HOST: 'db'
     depends_on: 
      - db
-    # labels:
-      # - traefik.frontend.rule=Host:${PROJECT_DOMAIN:myserver.mydomain}
-      # - traefik.docker.network=proxy
-      # - traefik.port=80   
-      # - traefik.enable=true 
-    # networks:
-      # - internal 
-      # - proxy
-      
-# Adminer
-# Usefull when you need to fix stuff in your ojs.
-#  adminer:
-#    image: adminer
-#    ports:
-#      - ${ADMINER_HTTP:9085}:8080
-#    networks:
-#      - internal
-#    depends_on:
-#      - db
