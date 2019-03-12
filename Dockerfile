@@ -131,8 +131,8 @@ ENV OJS_VERSION="3_1_2-0"       \
         SERVERNAME="localhost" \
         PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils \
         php7-apache2 php7-zlib php7-json php7-phar php7-openssl \
-        php7-curl php7-mcrypt php7-pdo_mysql php7-ctype \
-        php7-gd php7-xml php7-dom php7-iconv php7-mysqli"   
+        php7-curl php7-mcrypt php7-pdo_mysql php7-ctype php7-zip \
+        php7-gd php7-xml php7-dom php7-iconv php7-mysqli php7-mbstring"   
 
 RUN apk add --update --no-cache $PACKAGES && \
         mkdir -p /var/www/html/files /run/apache2 /run/supervisord/ && \
