@@ -1,0 +1,2 @@
+# Crontab for OJS Schedule tasks
+0 * * * *   ojs-run-scheduled

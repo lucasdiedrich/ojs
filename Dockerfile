@@ -111,7 +111,7 @@ RUN apk add --update --no-cache $PACKAGES && \
         cp config.TEMPLATE.inc.php config.inc.php && \    
         rm -rf $EXCLUDE && \
         find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
-        
+
 # -----------------------------------------------------------------------------------------------------------------------------------
 # RUNNING CONTAINER
 # -----------------------------------------------------------------------------------------------------------------------------------
@@ -134,10 +134,9 @@ ENV OJS_VERSION="3_1_2-0"       \
         php7-curl php7-mcrypt php7-pdo_mysql php7-ctype php7-zip \
         php7-gd php7-xml php7-dom php7-iconv php7-mysqli php7-mbstring"   
 
-RUN apk add --update --no-cache $PACKAGES && \
+RUN echo ${PACKAGES}; apk add --update --no-cache $PACKAGES && \
         mkdir -p /var/www/html/files /run/apache2 /run/supervisord/ && \
         chown -R apache:apache /var/www/* && \
-        echo "0 * * * *   ojs-run-scheduled" | crontab - && \
         sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf && \
         sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf
 
