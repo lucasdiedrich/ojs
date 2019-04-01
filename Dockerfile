@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------------------------------------------------------------
 # BUILDING CONTAINER
 # -----------------------------------------------------------------------------------------------------------------------------------
-FROM php:7.3-alpine as builder
+FROM php:7.2-alpine as builder
 LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
 WORKDIR /tmp/
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
@@ -139,7 +139,8 @@ RUN echo ${PACKAGES}; apk add --update --no-cache $PACKAGES && \
         mkdir -p /var/www/html/files /run/apache2 /run/supervisord/ && \
         chown -R apache:apache /var/www/* && \
         sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf && \
-        sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf
+        sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf && \
+        docker-php-ext-install mysqli && docker-php-ext-enable mysqli 
 
 COPY files/ /
 EXPOSE 80 443
