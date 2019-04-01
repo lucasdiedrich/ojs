@@ -115,7 +115,7 @@ RUN apk add --update --no-cache $PACKAGES && \
 # -----------------------------------------------------------------------------------------------------------------------------------
 # RUNNING CONTAINER
 # -----------------------------------------------------------------------------------------------------------------------------------
-FROM php:7.3-alpine
+FROM php:7.2-alpine
 LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
 WORKDIR /var/www/html
 COPY --from=builder /tmp/ /var/www/html/
