@@ -122,7 +122,7 @@ RUN apk add --update --no-cache $PACKAGES && \
     composer install -d plugins/generic/citationStyleLanguage --no-dev && \
     npm install -y && npm run build && \
     # Create directories
-    mkdir -p /var/www/html/files /run/apache2  /run/supervisord/ && \
+    mkdir -p /var/www/files /run/apache2  /run/supervisord/ && \
     cp config.TEMPLATE.inc.php config.inc.php && \
     chown -R apache:apache /var/www/* && \
     # Prepare crontab
@@ -138,6 +138,6 @@ COPY files/ /
 
 EXPOSE 80 443
 
-VOLUME [ "/var/www/html/files", "/var/www/html/public" ]
+VOLUME [ "/var/www/files", "/var/www/html/public" ]
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
