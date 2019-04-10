@@ -11,14 +11,14 @@ services:
       MYSQL_USER: ${MYSQL_USER:-ojs}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ojs}
   ojs:                    
-    image: lucasdiedrich/ojs:latest   
+    image: lucasdiedrich/ojs:php7-test
     env_file: .env
     container_name: ${COMPOSE_PROJECT_NAME:-pkp}_ojs
     hostname: ${COMPOSE_PROJECT_NAME:-pkp_ojs} 
     restart: always
     ports:
-      - "${HTTP_PORT:-8081}:80" 
-      - "${HTTPS_PORT:-8443}:443"
+      - "${HTTP_PORT:-8085}:80" 
+      - "${HTTPS_PORT:-8445}:443"
     volumes:
      - /etc/localtime:/etc/localtime           
 #      - ./files/private:/var/www/files       
@@ -28,7 +28,7 @@ services:
 #      - ./config/apache.htaccess:/var/www/html/.htaccess        
 #      - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
-      SERVERNAME: ${PROJECT_DOMAIN:-myserver.mydomain}
+      SERVERNAME: ${PROJECT_DOMAIN:-pkp.ojs.localhost}
       OJS_CLI_INSTALL: 1
       OJS_DB_HOST: 'db'
     depends_on: 
