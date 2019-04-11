@@ -74,7 +74,7 @@ By default the restful_url are enable and apache its already configured, so ther
 
 ## php.ini
 
-Any custom php configuration can be made at */etc/php5/conf.d/0-ojs.ini*, there are some optimized variables already, you can check at [php.ini](./files/php.ini).
+Any custom php configuration can be made at */etc/php7/conf.d/0-ojs.ini*, there are some optimized variables already, you can check at [php.ini](./files/php.ini).
 
 ## License
 
