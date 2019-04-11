@@ -136,7 +136,7 @@ ENV OJS_VERSION="3_1_2-0"       \
         php7-session"   
 
 RUN echo ${PACKAGES}; apk add --update --no-cache $PACKAGES && \
-        mkdir -p /var/www/html/files /run/apache2 /run/supervisord/ && \
+        mkdir -p /var/www/files /run/apache2 /run/supervisord/ && \
         chown -R apache:apache /var/www/* && \
         sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf && \
         sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf && \
@@ -144,6 +144,6 @@ RUN echo ${PACKAGES}; apk add --update --no-cache $PACKAGES && \
 
 COPY files/ /
 EXPOSE 80 443
-VOLUME [ "/var/www/html/files", "/var/www/html/public" ]
+VOLUME [ "/var/www/files", "/var/www/html/public" ]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
 

@@ -5,11 +5,6 @@ services:
     env_file: .env
     container_name: ${COMPOSE_PROJECT_NAME:-ojs}_db 
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-ojs}
-      MYSQL_USER: ${MYSQL_USER:-ojs}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ojs}
   ojs:                    
     image: lucasdiedrich/ojs:php7-test
     env_file: .env
@@ -21,16 +16,12 @@ services:
       - "${HTTPS_PORT:-8445}:443"
     volumes:
      - /etc/localtime:/etc/localtime           
-#      - ./files/private:/var/www/files       
-#      - ./files/public:/var/www/html/public  
-#      - ./files/logs:/var/log/apache2   
-#      - ./config/ojs.config.inc.php:/var/www/html/config.inc.php  
-#      - ./config/apache.htaccess:/var/www/html/.htaccess        
-#      - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
-    environment:
-      SERVERNAME: ${PROJECT_DOMAIN:-pkp.ojs.localhost}
-      OJS_CLI_INSTALL: 1
-      OJS_DB_HOST: 'db'
+    #- ./files/private:/var/www/files 
+    #- ./files/public:/var/www/html/public  
+    #- ./files/logs:/var/log/apache2   
+    #- ./config/ojs.config.inc.php:/var/www/html/config.inc.php  
+    #- ./config/apache.htaccess:/var/www/html/.htaccess  
+    #- ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
     depends_on: 
      - db
     # labels:
