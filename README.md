@@ -36,9 +36,9 @@ All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/
 
 |  Volume  | Info |
 |:------:|:-------:|
-| /var/www/html/files  | All uploaded files |
 | /var/www/html/public | All public files |
 | /var/www/html/config.inc.php  | If not provided a new one will be created |
+| /var/www/files  | All uploaded files |
 | /etc/ssl/apache2/server.pem  | SSL **crt** certificate |
 | /etc/ssl/apache2/server.key  | SSL **key** certificate |
 | /var/log/apache2  | Apache2 Logs |
