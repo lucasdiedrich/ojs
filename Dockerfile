@@ -121,15 +121,26 @@ WORKDIR /var/www/html
 COPY --from=builder /tmp/ /var/www/html/
 
 ENV OJS_VERSION="3_1_2-0"       \
-        OJS_CLI_INSTALL="0"         \
-        OJS_DB_HOST="localhost"     \
+        HTTPS="off" \
+        SERVERNAME="localhost"      \
+        OJS_BASE_URL="http://localhost"    \             
+        OJS_DB_HOST="db"     \
         OJS_DB_USER="ojs"           \
         OJS_DB_PASSWORD="ojs"       \
         OJS_DB_NAME="ojs"           \
         OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf" \
         OJS_CONF="/var/www/html/config.inc.php" \
-        SERVERNAME="localhost" \
-        HTTPS="on" \
+        OJS_SMTP_SERVER="smtp.example.fr" \
+        OJS_SMTP_PORT="587" \
+        OJS_SMTP_AUTH="tls" \
+        OJS_SMTP_USER="smtp" \
+        OJS_SMTP_PASSWORD="password" \
+        OJS_ADMIN_NAME="admin" \
+        OJS_ADMIN_PASSWORD="admin" \
+        OJS_ADMIN_EMAIL="myemail@email.fr" \
+        OJS_PRIMARY_LOCALE="en_US" \
+        OJS_SECONDARY_LOCALE="fr_FR" \
+        OJS_TIMEZONE="Paris" \
         PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils file \
         php7-apache2 php7-zlib php7-json php7-phar php7-openssl \
         php7-curl php7-mcrypt php7-pdo_mysql php7-ctype php7-zip \
@@ -139,11 +150,17 @@ ENV OJS_VERSION="3_1_2-0"       \
 RUN echo ${PACKAGES}; apk add --update --no-cache $PACKAGES && \
         mkdir -p /var/www/files /run/apache2 /run/supervisord/ && \
         chown -R apache:apache /var/www/* && \
+        # Prepare crontab
+        #echo "0 * * * *   ojs-run-scheduled" | crontab - && \
         sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf && \
         sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf && \
         docker-php-ext-install mysqli && docker-php-ext-enable mysqli 
 
 COPY files/ /
+
+# copy custom php ini
+COPY conf/php/php.ini /usr/local/etc/php/conf.d/custom.ini
+
 EXPOSE 80 443
 VOLUME [ "/var/www/files", "/var/www/html/public" ]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

@@ -1,45 +1,52 @@
 version: "3.6"             
 services:
+
   db:                      
     image: mariadb:10.2    
-    env_file: .env
-    container_name: ${COMPOSE_PROJECT_NAME:-ojs}_db 
+    env_file:
+      - .env
+    container_name: ${COMPOSE_PROJECT_NAME}_db
     restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    #volumes:
+      #- ../volume_db_ojs:/var/lib/mysql
+
   ojs:                    
-    image: lucasdiedrich/ojs:php7-test
-    env_file: .env
-    container_name: ${COMPOSE_PROJECT_NAME:-pkp}_ojs
-    hostname: ${COMPOSE_PROJECT_NAME:-pkp_ojs} 
+    image: ojs_custom_php7:3.1.2-0
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    env_file:            
+      - .env
+    container_name: ${COMPOSE_PROJECT_NAME}_ojs
+    hostname: ${COMPOSE_PROJECT_NAME}
     restart: always
     ports:
-      - "${HTTP_PORT:-8085}:80" 
-      - "${HTTPS_PORT:-8445}:443"
-    volumes:
-     - /etc/localtime:/etc/localtime           
-    #- ./files/private:/var/www/files 
-    #- ./files/public:/var/www/html/public  
-    #- ./files/logs:/var/log/apache2   
-    #- ./config/ojs.config.inc.php:/var/www/html/config.inc.php  
-    #- ./config/apache.htaccess:/var/www/html/.htaccess  
-    #- ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
+      - "${HTTP_PORT}:80" 
+      - "${HTTPS_PORT}:443"
+    #volumes:
+       #- /etc/localtime:/etc/localtime # not really needed, because timezone is configurable with recreate_config script
+       #- ../volume_files_upload_dir:/var/www/html/files #must have chmod 777 (read write for all)
+       #- ../volume_files_public:/var/www/html/public #must have chmod 777 (read write for all)
+    environment:
+      SERVERNAME: ${PROJECT_DOMAIN}
+      OJS_DB_HOST: 'db'
+      HTTPS: "off"
     depends_on: 
      - db
-    # labels:
-      # - traefik.frontend.rule=Host:${PROJECT_DOMAIN:-myserver.mydomain}
-      # - traefik.docker.network=proxy
-      # - traefik.port=80   
-      # - traefik.enable=true 
-    # networks:
-      # - internal 
-      # - proxy
+    labels:
+      - traefik.frontend.rule=Host:${PROJECT_DOMAIN}
+      - traefik.docker.network=proxy
+      - traefik.port=80   
+      - traefik.enable=true 
       
-# Adminer
-# Usefull when you need to fix stuff in your ojs.
-#  adminer:
-#    image: adminer
-#    ports:
-#      - ${ADMINER_HTTP:-9085}:8080
-#    networks:
-#      - internal
-#    depends_on:
-#      - db
+  adminer:
+    image: adminer
+    ports:
+      - ${ADMINER_HTTP}:8080 
+    depends_on:
+      - db

@@ -1,0 +1,64 @@
+    #!/bin/sh
+        
+    echo "creation of config file"
+    cp /var/www/html/config.TEMPLATE.inc.php /var/www/html/config.inc.php
+    chown apache:apache /var/www/html/config.inc.php
+
+    # sed operations
+    # set driver, host, username, password, database name in config.inc.php  
+    sed -i "s/driver = mysql/driver = mysqli/g" /var/www/html/config.inc.php
+    sed -i "s/host = localhost/host = ${OJS_DB_HOST}/g" /var/www/html/config.inc.php   
+    sed -i "s/username = ojs/username = ${OJS_DB_USER}/g" /var/www/html/config.inc.php
+    sed -i "s/password = ojs/password = ${OJS_DB_PASSWORD}/g" /var/www/html/config.inc.php
+    sed -i "s/name = ojs/name = ${OJS_DB_NAME}/g" /var/www/html/config.inc.php
+
+    # database charset
+    sed -i "s/database_charset = Off/database_charset = utf8/g" /var/www/html/config.inc.php
+
+    # connection charset
+    sed -i "s/connection_charset = Off/connection_charset = utf8/g" /var/www/html/config.inc.php
+   
+    # set base_url in config.inc.php
+    sed -i 's|base_url = "http://pkp.sfu.ca/ojs"|base_url = "'"${OJS_BASE_URL}"'"|g' /var/www/html/config.inc.php
+
+    # set memcache_hostname in config.inc.php
+    sed -i "s/memcache_hostname = localhost/memcache_hostname = ${SERVERNAME}/g" /var/www/html/config.inc.php
+
+    # set smtp values
+    sed -i "s/; smtp = On/smtp = On/g" /var/www/html/config.inc.php
+    sed -i "s/; smtp_server = mail.example.com/smtp_server = ${OJS_SMTP_SERVER}/g" /var/www/html/config.inc.php
+    sed -i "s/; smtp_port = 25/smtp_port = ${OJS_SMTP_PORT}/g" /var/www/html/config.inc.php
+    sed -i "s/; smtp_auth = ssl/smtp_auth = ${OJS_SMTP_AUTH}/g" /var/www/html/config.inc.php
+    sed -i "s/; smtp_username = username/smtp_username = ${OJS_SMTP_USER}/g" /var/www/html/config.inc.php
+    sed -i "s/; smtp_password = password/smtp_password = ${OJS_SMTP_PASSWORD}/g" /var/www/html/config.inc.php
+    sed -i "s/; default_envelope_sender = my_address@my_host.com/default_envelope_sender = ${OJS_ADMIN_EMAIL}/g" /var/www/html/config.inc.php
+    
+    # set scheduled tasks
+    sed -i "s/scheduled_tasks = Off/scheduled_tasks = On/g" /var/www/html/config.inc.php
+
+    # set restful url
+    sed -i "s/restful_urls = Off/restful_urls = On/g" /var/www/html/config.inc.php
+
+    # disable beacon
+    sed -i "s/enable_beacon = On/enable_beacon = Off/g" /var/www/html/config.inc.php
+
+    # default locale   
+    sed -i "s/locale = en_US/locale = ${OJS_PRIMARY_LOCALE}/g" /var/www/html/config.inc.php
+
+    # OAI Repository identifier
+    sed -i "s/repository_id = ojs.pkp.sfu.ca/repository_id = ${SERVERNAME}/g" /var/www/html/config.inc.php
+ 
+    # cdn to off
+    sed -i "s/enable_cdn = On/enable_cdn = Off/g" /var/www/html/config.inc.php
+
+    # set files dir upload
+    sed -i "s|files_dir = files|files_dir = /var/www/html/files|g" /var/www/html/config.inc.php
+
+    # set timezone   
+    sed -i 's/time_zone = "UTC"/time_zone = "'"${OJS_TIMEZONE}"'"/g' /var/www/html/config.inc.php
+
+    # set time to 24h format
+    sed -i 's/datetime_format_short = "%Y-%m-%d %I:%M %p"/datetime_format_short = "%Y-%m-%d %H:%M:%S"/g' /var/www/html/config.inc.php
+    sed -i 's/datetime_format_long = "%B %e, %Y - %I:%M %p"/datetime_format_long = "%B %e, %Y - %H:%M:%S"/g' /var/www/html/config.inc.php
+    sed -i 's/time_format = "%I:%M %p"/time_format = "%H:%M:%S"/g' /var/www/html/config.inc.php
+
