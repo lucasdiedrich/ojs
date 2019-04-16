@@ -20,10 +20,17 @@ if [ ! -f $KEY_PATH ] ||
 fi
 
 # check if upload dir exists, if not then create it
+<<<<<<< HEAD
 if [[ ! -d "/var/www/files" ]] ; then
     echo "create /var/www/files directory" 
     mkdir /var/www/files
     chown -R apache:apache /var/www/files
+=======
+if [[ ! -d "/var/www/html/files" ]] ; then
+    echo "create /var/www/html/files directory" 
+    mkdir /var/www/html/files
+    chown -R apache:apache /var/www/html/files
+>>>>>>> cd4f3aa350538e8198f3662ae47f29326c214409
 fi
 
 # check if tables are present in the database

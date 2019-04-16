@@ -52,7 +52,11 @@
     sed -i "s/enable_cdn = On/enable_cdn = Off/g" /var/www/html/config.inc.php
 
     # set files dir upload
+<<<<<<< HEAD
     sed -i "s|files_dir = files|files_dir = /var/www/files|g" /var/www/html/config.inc.php
+=======
+    sed -i "s|files_dir = files|files_dir = /var/www/html/files|g" /var/www/html/config.inc.php
+>>>>>>> cd4f3aa350538e8198f3662ae47f29326c214409
 
     # set timezone   
     sed -i 's/time_zone = "UTC"/time_zone = "'"${OJS_TIMEZONE}"'"/g' /var/www/html/config.inc.php
