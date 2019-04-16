@@ -10,6 +10,8 @@ sed -i -e "s/^#ServerName.*/ServerName ${SERVERNAME}/" /etc/apache2/httpd.conf
 sed -i -e "s/restful_urls = Off/restful_urls = On/g" $OJS_CONF
 sed -i -e "s/enable_cdn = On/enable_cdn = Off/g" $OJS_CONF
 
+chmod +x /usr/local/bin/recreate_config
+
 # Generate a cert based on ServerName
 if [ ! -f $KEY_PATH ] ||
     [[ `openssl x509 -in $PEM_PATH -noout -subject | cut -d '/' -f2-` == *$SERVERNAME* ]]; then
@@ -17,7 +19,35 @@ if [ ! -f $KEY_PATH ] ||
     openssl req -x509 -nodes -days 1460 -newkey rsa:2048 -keyout $KEY_PATH -out $PEM_PATH -subj "/CN=$SERVERNAME/"
 fi
 
-if [[ ${OJS_CLI_INSTALL} == "1" ]] &&
-    grep -q 'installed = Off' $OJS_CONF ; then
+# check if upload dir exists, if not then create it
+if [[ ! -d "/var/www/html/files" ]] ; then
+    echo "create /var/www/html/files directory" 
+    mkdir /var/www/html/files
+    chown -R apache:apache /var/www/html/files
+fi
+
+# check if tables are present in the database
+num_tables=`php /usr/local/bin/count_tables_db.php ${OJS_DB_HOST} ${OJS_DB_USER} ${OJS_DB_PASSWORD} ${OJS_DB_NAME}`
+
+# automatic installation scenario when database is empty
+if [[ $num_tables -eq 0 ]] ; then
+    # recreate config file from docker environment variables
+    /usr/local/bin/recreate_config
     ojs-cli-install
 fi
+
+# no installation scenario if tables are already present, only reuse persistent data
+# and create on the fly the config file
+if [[ $num_tables -gt 0 ]] ; then  
+    # recreate config file from docker environment variables
+    /usr/local/bin/recreate_config    
+fi
+
+# set installation on
+sed -i "s/installed = Off/installed = On/g" /var/www/html/config.inc.php
+
+# workaround for local languages which don't have help manual files, 
+# copy english manual, uncomment next line and set language code if you need help manual
+# cp -r /var/www/html/docs/manual/en/* /var/www/html/docs/manual/<your local language code>/
+    
+echo "End of pre-start step"
