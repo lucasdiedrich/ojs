@@ -1,7 +1,7 @@
 FROM alpine:3.7
 
 LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
-ARG ref=ojs-3_1_1-4
+ARG ref=ojs-3_1_2-1
 WORKDIR /var/www/html
 
 ENV COMPOSER_ALLOW_SUPERUSER=1  \
