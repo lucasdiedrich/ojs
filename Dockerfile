@@ -5,7 +5,7 @@ FROM php:7.2-alpine as builder
 LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
 WORKDIR /tmp/
 ENV COMPOSER_ALLOW_SUPERUSER=1 \
-        OJS_VERSION="3_1_2-0" \
+        OJS_VERSION="3_1_2-1" \
         PACKAGES="curl nodejs npm git" \
         EXCLUDE="dbscripts/xml/data/locale/en_US/sample.xml     \
         dbscripts/xml/data/sample.xml					\
@@ -120,7 +120,7 @@ LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
 WORKDIR /var/www/html
 COPY --from=builder /tmp/ /var/www/html/
 
-ENV OJS_VERSION="3_1_2-0"       \
+ENV OJS_VERSION="3_1_2-1"       \
         OJS_CLI_INSTALL="0"         \
         OJS_DB_HOST="localhost"     \
         OJS_DB_USER="ojs"           \
@@ -134,7 +134,7 @@ ENV OJS_VERSION="3_1_2-0"       \
         php7-apache2 php7-zlib php7-json php7-phar php7-openssl \
         php7-curl php7-mcrypt php7-pdo_mysql php7-ctype php7-zip \
         php7-gd php7-xml php7-dom php7-iconv php7-mysqli php7-mbstring \
-        php7-session"   
+        php7-session php7-xml php7-simplexml"   
 
 RUN echo ${PACKAGES}; apk add --update --no-cache $PACKAGES && \
         mkdir -p /var/www/files /run/apache2 /run/supervisord/ && \
