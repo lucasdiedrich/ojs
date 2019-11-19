@@ -1,13 +1,14 @@
 # OJS (Open Journal Systems) - PKP - Container/Docker
 
+| **IMPORTANT: This repostitoy is still pre-alpha, so it can't be used in testing or production evironments.** |
+|:------------------------------------------------------------------------------------------------------------:|
+
+
 Open Journal Systems (OJS) is a journal management and publishing system that has been developed by the Public Knowledge Project through its federally funded efforts to expand and improve access to research.
 
 This container was built based on [buildpkg.sh](https://github.com/pkp/ojs/blob/ojs-3_1_0-1/tools/buildpkg.sh) from own pkp-ojs, so all the dependencies are already included and the software is ready to run. Also is built on top of [Alpine Linux](https://alpinelinux.org/) which is incredible lightweight.
 
 This repository is a fork of the work formerly done by [Lucas Dietrich](https://github.com/lucasdiedrich/ojs).
-
-**IMPORTANT: This repostitoy is still pre-alpha, so it can't be used in testing or production evironments.**
-
 
 ## How to use
 
