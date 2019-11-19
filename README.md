@@ -4,6 +4,11 @@ Open Journal Systems (OJS) is a journal management and publishing system that ha
 
 This container was built based on [buildpkg.sh](https://github.com/pkp/ojs/blob/ojs-3_1_0-1/tools/buildpkg.sh) from own pkp-ojs, so all the dependencies are already included and the software is ready to run. Also is built on top of [Alpine Linux](https://alpinelinux.org/) which is incredible lightweight.
 
+This repository is a fork of the work formerly done by [Lucas Dietrich](https://github.com/lucasdiedrich/ojs).
+
+**IMPORTANT: This repostitoy is still pre-alpha, so it can't be used in testing or production evironments.**
+
+
 ## How to use
 
 ```bash
@@ -19,7 +24,7 @@ To install automatically when the container init you can use **OJS_CLI_INSTALL=1
 
 ## Versions
 
-All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/lucasdiedrich/ojs/tags/).
+All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/pkpofficial/ojs/tags/).
 
 ## Environment Variables
 
@@ -78,4 +83,4 @@ Any custom php configuration can be made at */etc/php7/conf.d/0-ojs.ini*, there 
 
 ## License
 
-MIT © [Lucas Diedrich](https://github.com/lucasdiedrich)
+GPL3 © [PKP](https://github.com/pkp)
