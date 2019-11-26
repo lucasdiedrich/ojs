@@ -12,7 +12,7 @@ services:
       MYSQL_USER: ${MYSQL_USER:ojs}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:ojs}
   ojs:                    
-    image: pkpofficial/ojs:3_1_2-0
+    image: pkpofficial/ojs:3_1_1-4
     env_file:            
       - .env
     container_name: ojs_app_${COMPOSE_PROJECT_NAME:journal}
