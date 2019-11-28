@@ -62,6 +62,12 @@ docker exec -it ojs /usr/local/bin/ojs-upgrade
 
 After the upgrade diff your **config.inc.php** with the version of the new OJS version, in some new version new variables can be added to the file.
 
+## Create an image for a new OJS version
+
+1. Create the specific directory structure (e.g. ``3_1_2-1/alpine/apache/php7``).
+2. Generate the Dockerfile from the appropriate Dockerfile template
+3. Run update.sh
+
 ## Docker-compose
 
 There is an example docker-compose [docker-compose](./docker-compose.yml), to run it download the raw file to an folder and exec the command below:
