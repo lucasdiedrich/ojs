@@ -1,12 +1,12 @@
 FROM alpine:3.7
 
-LABEL maintainer="Public Knowledge Project <marc.bria@gmail.com>"
+LABEL maintainer="Lucas G. Diedrich <lucas.diedrich@gmail.com>"
 WORKDIR /var/www/html
 
 ENV COMPOSER_ALLOW_SUPERUSER=1  \
     SERVERNAME="localhost"      \
     HTTPS="on"                  \
-    OJS_VERSION=3_1_2-1 \
+    OJS_VERSION=%%OJS_VERSION%% \
     OJS_CLI_INSTALL="0"         \
     OJS_DB_HOST="localhost"     \
     OJS_DB_USER="ojs"           \
@@ -14,9 +14,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1  \
     OJS_DB_NAME="ojs"           \
     OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf" \
     OJS_CONF="/var/www/html/config.inc.php" \
-    PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils php7 php7-fpm php7-cli php7-apache2 php7-zlib \
-             php7-json php7-mbstring php7-tokenizer php7-simplexml php7-phar php7-openssl php7-curl php7-mcrypt php7-pdo_mysql php7-mysqli php7-session php7-ctype \
-             php7-gd php7-xml php7-dom php7-iconv curl nodejs git" \
+    PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils php5 php5-fpm php5-cli php5-apache2 php5-zlib \
+             php5-json php5-phar php5-openssl php5-mysql php5-curl php5-mcrypt php5-pdo_mysql php5-ctype \
+             php5-gd php5-xml php5-dom php5-iconv curl nodejs git" \
     EXCLUDE="dbscripts/xml/data/locale/en_US/sample.xml     \
             dbscripts/xml/data/sample.xml					\
             docs/dev										\
@@ -109,6 +109,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1  \
             /var/cache/apk/* "
 
 RUN apk add --update --no-cache $PACKAGES && \
+    ln -s /usr/bin/php5 /usr/bin/php && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
     # Configure and download code from git
     git config --global url.https://.insteadOf git:// && \
