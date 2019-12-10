@@ -6,9 +6,11 @@ PEM_PATH="/etc/ssl/nginx/server.pem"
 echo "[OJS Pre-Start] Enforcing configs..."
 
 sed -i -e "s/www.example.com/${SERVERNAME}/g" $OJS_WEB_CONF
-sed -i -e "s/^#server_name.*/server_name ${SERVERNAME}/" /etc/nginx/ojs.conf
+sed -i -e "s/^#server_name.*/server_name ${SERVERNAME}/" $OJS_WEB_CONF
 sed -i -e "s/restful_urls = Off/restful_urls = On/g" $OJS_CONF
 sed -i -e "s/enable_cdn = On/enable_cdn = Off/g" $OJS_CONF
+sed -i -e "s/host = localhost/host = ${OJS_DB_HOST}/g" $OJS_CONF
+sed -i -e "s/driver = mysql/driver = ${OJS_DB_DRIVER}/g" $OJS_CONF
 
 # Generate a cert based on ServerName
 if [ ! -f $KEY_PATH ] ||
@@ -21,3 +23,4 @@ if [[ ${OJS_CLI_INSTALL} == "1" ]] &&
     grep -q 'installed = Off' $OJS_CONF ; then
     ojs-cli-install
 fi
+
