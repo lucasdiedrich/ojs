@@ -133,7 +133,7 @@ RUN apk add --update --no-cache $PACKAGES && \
 COPY files/ /
 
 # Copy nginx ojs.conf
-COPY config/nginx/conf.d/ojs.conf /etc/nginx/conf.d/ojs.conf
+COPY config/nginx/conf.d/ojs.conf /etc/nginx/conf.d/default.conf
 
 # Copy php configuration
 COPY config/php7/conf.d/0-ojs.ini /etc/php7/conf.d/0-ojs.ini
