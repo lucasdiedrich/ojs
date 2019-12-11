@@ -135,6 +135,8 @@ RUN apk add --update --no-cache $PACKAGES && \
 
 COPY files/ /
 
+COPY config/supervisord.conf /etc/supervisord.conf
+COPY config/apache2/conf.d/ojs.conf /etc/apache2/conf.d/ojs.conf
 EXPOSE 80 443
 
 VOLUME [ "/var/www/files", "/var/www/html/public" ]
