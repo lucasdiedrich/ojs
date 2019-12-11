@@ -29,7 +29,7 @@ services:
     restart: always
 
   ojs:
-    image: pkpofficial/ojs:3_1_2-2
+    image: pkpofficial/ojs:3_1_2-2_nginx
     build: .
     env_file:
       - .env
@@ -40,11 +40,11 @@ services:
       - "${HTTP_PORT}:80"
       - "${HTTPS_PORT}:443"
     volumes:
-      #- /etc/localtime:/etc/localtime
+      - /etc/localtime:/etc/localtime
       - ./files/private:/var/www/files
       - ./files/public:/var/www/html/public
       - ./files/db:/var/lib/mysql
-      - ./files/logs:/var/log/apache2
+      - ./files/logs:/var/log/nginx
        # Create files first, to avoid errors:
 #      - ./config/ojs.config.inc.php:/var/www/html/config.inc.php
 #      - ./config/apache.htaccess:/var/www/html/.htaccess

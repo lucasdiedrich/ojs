@@ -12,11 +12,11 @@ ENV COMPOSER_ALLOW_SUPERUSER=1  \
     OJS_DB_USER="ojs"           \
     OJS_DB_PASSWORD="ojs"       \
     OJS_DB_NAME="ojs"           \
-    OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf" \
+    OJS_WEB_CONF="/etc/nginx/conf.d/ojs.conf" \
     OJS_CONF="/var/www/html/config.inc.php" \
-    PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils php7 php7-fpm php7-cli php7-apache2 php7-zlib \
+    PACKAGES="supervisor dcron nginx php7 php7-fpm php7-cli php7-zlib \
              php7-json php7-mbstring php7-tokenizer php7-simplexml php7-phar php7-openssl php7-curl php7-mcrypt php7-pdo_mysql php7-mysqli php7-session php7-ctype \
-             php7-gd php7-xml php7-dom php7-iconv curl nodejs git" \
+             php7-gd php7-xml php7-dom php7-iconv curl nodejs git openssl" \
     EXCLUDE="dbscripts/xml/data/locale/en_US/sample.xml     \
             dbscripts/xml/data/sample.xml					\
             docs/dev										\
@@ -121,22 +121,28 @@ RUN apk add --update --no-cache $PACKAGES && \
     composer install -d plugins/generic/citationStyleLanguage --no-dev && \
     npm install -y && npm run build && \
     # Create directories
-    mkdir -p /var/www/files /run/apache2  /run/supervisord/ && \
+    mkdir -p /var/www/files /run/nginx  /run/supervisord/ /etc/ssl/nginx && \
     cp config.TEMPLATE.inc.php config.inc.php && \
-    chown -R apache:apache /var/www/* && \
+    chown -R nginx:nginx /var/www/* && \
     # Prepare crontab
     echo "0 * * * *   ojs-run-scheduled" | crontab - && \
-    # Prepare httpd.conf
-    sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf && \
-    sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf && \
     # Clear the image
     apk del --no-cache nodejs git && rm -rf $EXCLUDE && \
     find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
 
 COPY files/ /
 
+# Copy nginx ojs.conf
+COPY config/nginx/conf.d/ojs.conf /etc/nginx/conf.d/default.conf
+
+# Copy php configuration
+COPY config/php7/conf.d/0-ojs.ini /etc/php7/conf.d/0-ojs.ini
+COPY config/php7/php-fpm.d/www.conf /etc/php7/php-fpm.d/www.conf
+COPY config/php7/php-fpm.d/global.conf /etc/php7/php-fpm.d/global.conf
+
+# Copy supervisor configuration
 COPY config/supervisord.conf /etc/supervisord.conf
-COPY config/apache2/conf.d/ojs.conf /etc/apache2/conf.d/ojs.conf
+
 EXPOSE 80 443
 
 VOLUME [ "/var/www/files", "/var/www/html/public" ]
