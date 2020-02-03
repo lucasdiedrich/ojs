@@ -26,37 +26,41 @@ set -Eeuo pipefail
 cd "$(dirname "$(readlink -f "$BASH_SOURCE")")"
 
 # You can pass the specific version you like to recreate.
-ojsversions=( "$@" )
+ojsVersions=( "$@" )
 
 # Otherwise, all the existing versions will be recreated (recommened).
-if [ ${#ojsversions[@]} -eq 0 ]; then
-	versions=( */ )
+if [ ${#ojsVersions[@]} -eq 0 ]; then
+	ojsVersions=( */ )
 fi
-versions=( "${versions[@]%/}" )
+ojsVersions=( "${ojsVersions[@]%/}" )
 
-# MBR: Won't be better if we define the versions?
-#    ojsversions=(   "3_1_2-0" \
+# MBR: Won't be better if we define the manually the versions?
+#    ojsVersions=(   "3_1_2-0" \
 #                    "3_1_2-1" \
 #                    "3_1_2-2" \
 #                    "3_1_2-3" \
 #                    "3_1_2-4" )
 
 
-# The webservers and phpversions that will be supported:
-webservers=( apache nginx )
-phpversions=( php5 php7 )
+# The OS, web servers and php versions that will be supported:
+osVersions=( alpine )
+webServers=( apache nginx )
+phpVersions=( php5 php7 )
 
-for version in "${ojsversions[@]}"; do
-    for server in "${webservers[@]}"; do
-        for php in "${phpversions[@]}"; do
-            # We don't want all the combinations, just existing folders:
-            [ -f "$version/alpine/$server/$php/Dockerfile" ] || continue
+echo "Building Dockerfiles for:"
 
-            # Replace OJS_VERSION:
-            sed -e "s!%%OJS_VERSION%%!$version!g" \
-                "Dockerfile-alpine-$server-$php.template" \
-                > "$version/alpine/$server/$php/Dockerfile"
-            echo "[$server] $version: $php"
-        done
-    done	
+for os in "${osVersions[@]}"; do
+    for version in "${ojsVersions[@]}"; do
+        for server in "${webServers[@]}"; do
+            for php in "${phpVersions[@]}"; do
+                # We don't want all the combinations, just existing folders:
+                [ -f "$version/$os/$server/$php/Dockerfile" ] || continue
+                # Replace OJS_VERSION:
+                sed -e "s!%%OJS_VERSION%%!$version!g" \
+                    "Dockerfile-$os-$server-$php.template" \
+                    > "$version/$os/$server/$php/Dockerfile"
+		echo "$version: [$server] $php (over $os)"
+            done
+        done	
+    done
 done
