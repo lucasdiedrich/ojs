@@ -30,7 +30,7 @@ ojsVersions=( "$@" )
 
 # Otherwise, all the existing versions will be recreated (recommened).
 if [ ${#ojsVersions[@]} -eq 0 ]; then
-	ojsVersions=( */ )
+	ojsVersions=( versions/* )
 fi
 ojsVersions=( "${ojsVersions[@]%/}" )
 
@@ -47,7 +47,7 @@ osVersions=( alpine )
 webServers=( apache nginx )
 phpVersions=( php5 php7 )
 
-echo "Building Dockerfiles for:"
+echo "Building Docker stacks for:"
 
 for os in "${osVersions[@]}"; do
     for version in "${ojsVersions[@]}"; do
@@ -55,10 +55,13 @@ for os in "${osVersions[@]}"; do
             for php in "${phpVersions[@]}"; do
                 # We don't want all the combinations, just existing folders:
                 [ -f "$version/$os/$server/$php/Dockerfile" ] || continue
-                # Replace OJS_VERSION:
+                # Replace OJS_VERSION in templates:
                 sed -e "s!%%OJS_VERSION%%!$version!g" \
-                    "Dockerfile-$os-$server-$php.template" \
+                    "templates/dockerFiles/Dockerfile-$os-$server-$php.template" \
                     > "$version/$os/$server/$php/Dockerfile"
+                sed -e "s!%%OJS_VERSION%%!$version!g" \
+                    "templates/dockerComposes/docker-compose-$server.template" \
+                    > "$version/$os/$server/$php/docker-compose.yml"
 		echo "$version: [$server] $php (over $os)"
             done
         done	
