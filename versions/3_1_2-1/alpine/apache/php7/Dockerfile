@@ -6,22 +6,23 @@ WORKDIR /var/www/html
 ENV COMPOSER_ALLOW_SUPERUSER=1  \
     SERVERNAME="localhost"      \
     HTTPS="on"                  \
-    OJS_VERSION=versions/3_1_2-1 \
+    OJS_VERSION=3_1_2-1 \
     OJS_CLI_INSTALL="0"         \
     OJS_DB_HOST="localhost"     \
     OJS_DB_USER="ojs"           \
     OJS_DB_PASSWORD="ojs"       \
     OJS_DB_NAME="ojs"           \
-    OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf" \
-    OJS_CONF="/var/www/html/config.inc.php" \
-    PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils php7 php7-fpm php7-cli php7-apache2 php7-zlib \
-             php7-json php7-mbstring php7-tokenizer php7-simplexml php7-phar php7-openssl php7-curl php7-mcrypt php7-pdo_mysql php7-mysqli php7-session php7-ctype \
-             php7-gd php7-xml php7-dom php7-iconv curl nodejs git" \
+    OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf"   \
+    OJS_CONF="/var/www/html/config.inc.php"       \
+    PACKAGES="supervisor dcron apache2 apache2-ssl apache2-utils php7 php7-fpm php7-cli php7-apache2   \
+             php7-zlib php7-json php7-mbstring php7-tokenizer php7-simplexml php7-phar php7-openssl    \
+             php7-curl php7-mcrypt php7-pdo_mysql php7-mysqli php7-session php7-ctype php7-gd php7-xml \
+             php7-dom php7-iconv curl nodejs git" \
     EXCLUDE_URL="https://raw.githubusercontent.com/pkp/docker-ojs/master/excludeVar.list"
 
 RUN apk add --update --no-cache $PACKAGES && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    # Configure and download code from git
+    # Configure and download code from git 
     git config --global url.https://.insteadOf git:// && \
     git config --global advice.detachedHead false && \
     git clone --depth 1 --single-branch --branch $OJS_VERSION --progress https://github.com/pkp/ojs.git . && \

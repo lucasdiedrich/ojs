@@ -6,17 +6,18 @@ WORKDIR /var/www/html
 ENV COMPOSER_ALLOW_SUPERUSER=1  \
     SERVERNAME="localhost"      \
     HTTPS="on"                  \
-    OJS_VERSION=versions/3_1_2-3 \
+    OJS_VERSION=3_1_2-3 \
     OJS_CLI_INSTALL="0"         \
     OJS_DB_HOST="localhost"     \
     OJS_DB_USER="ojs"           \
     OJS_DB_PASSWORD="ojs"       \
     OJS_DB_NAME="ojs"           \
     OJS_WEB_CONF="/etc/nginx/conf.d/ojs.conf" \
-    OJS_CONF="/var/www/html/config.inc.php" \
-    PACKAGES="supervisor dcron nginx php7 php7-fpm php7-cli php7-zlib \
-             php7-json php7-mbstring php7-tokenizer php7-simplexml php7-phar php7-openssl php7-curl php7-mcrypt php7-pdo_mysql php7-mysqli php7-session php7-ctype \
-             php7-gd php7-xml php7-dom php7-iconv curl nodejs git openssl" \
+    OJS_CONF="/var/www/html/config.inc.php"   \
+    PACKAGES="supervisor dcron nginx php7 php7-fpm php7-cli php7-zlib php7-json       \
+             php7-mbstring php7-tokenizer php7-simplexml php7-phar php7-openssl       \
+             php7-curl php7-mcrypt php7-pdo_mysql php7-mysqli php7-session php7-ctype \
+             php7-gd php7-xml php7-dom php7-iconv curl nodejs git openssl"            \
     EXCLUDE_URL="https://raw.githubusercontent.com/pkp/docker-ojs/master/excludeVar.list"
 
 RUN apk add --update --no-cache $PACKAGES && \

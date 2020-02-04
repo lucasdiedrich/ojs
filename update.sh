@@ -50,21 +50,22 @@ phpVersions=( php5 php7 )
 
 printf "\nBuilding Docker stacks for: \n\n"
 
-for os in "${osVersions[@]}"; do
-    for version in "${ojsVersions[@]}"; do
+for versionPath in "${ojsVersions[@]}"; do
+	for os in "${osVersions[@]}"; do
         for server in "${webServers[@]}"; do
             for php in "${phpVersions[@]}"; do
                 # We don't want all the combinations, just existing folders:
-                [ -f "$version/$os/$server/$php/Dockerfile" ] || continue
+                [ -f "$versionPath/$os/$server/$php/Dockerfile" ] || continue
+								# Remove folder's prefix to get the version number:
+								version=( "${versionPath/'versions/'/}" )
                 # Replace OJS_VERSION in templates:
                 sed -e "s!%%OJS_VERSION%%!$version!g" \
                     "templates/dockerFiles/Dockerfile-$os-$server-$php.template" \
-                    > "$version/$os/$server/$php/Dockerfile"
+                    > "$versionPath/$os/$server/$php/Dockerfile"
                 sed -e "s!%%OJS_VERSION%%!$version!g" \
                     "templates/dockerComposes/docker-compose-$server.template" \
-                    > "$version/$os/$server/$php/docker-compose.yml"
-								version=( "${version/'versions/'/'> '}" )
-								echo "$version: [$server] $php (over $os)"
+                    > "$versionPath/$os/$server/$php/docker-compose.yml"
+								echo "> $version: [$server] $php (over $os)"
             done
         done
     done
