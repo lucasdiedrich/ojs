@@ -22,7 +22,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1  \
 
 RUN apk add --update --no-cache $PACKAGES && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    # Configure and download code from git 
+    # Configure and download code from git
     git config --global url.https://.insteadOf git:// && \
     git config --global advice.detachedHead false && \
     git clone --depth 1 --single-branch --branch $OJS_VERSION --progress https://github.com/pkp/ojs.git . && \
@@ -48,7 +48,7 @@ RUN apk add --update --no-cache $PACKAGES && \
     apk del --no-cache nodejs git && \
     find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
 
-COPY files/ /
+COPY root/ /
 
 EXPOSE 80 443
 

@@ -5,11 +5,12 @@
 #
 #         USAGE:  update [<versionNum>]
 #
-#   DESCRIPTION:  A script to generate Dockerfiles based on Dockertemplates.
+#   DESCRIPTION:  A script to update the Dockerfiles and docker-composes.yml,
+#                 based templates.
 #
 #    PARAMETERS:
 #  <versionNum>:  (optional) The release version that you like to generate.
-#                 If you don't specify any, all the existing versions will be generated.
+#                 If any, all the existing versions will be updated.
 #  REQUIREMENTS:  sed
 #     TODO/BUGS:  Parameters are positional (I don't like getopt or getopts)
 #         NOTES:  ---
@@ -17,7 +18,7 @@
 #  ORGANIZATION:  Public Knowledge Project (PKP)
 #       LICENSE:  GPL 3
 #       CREATED:  30/01/2020 02:01:15 CEST
-#       UPDATED:  03/02/2020 15:50:00 CEST
+#       UPDATED:  04/02/2020 23:50:00 CEST
 #      REVISION:  1.0
 #===============================================================================
 
@@ -48,10 +49,10 @@ osVersions=( alpine )
 webServers=( apache nginx )
 phpVersions=( php5 php7 )
 
-printf "\nBuilding Docker stacks for: \n\n"
+printf "\nUpdating Docker stacks for: \n\n"
 
 for versionPath in "${ojsVersions[@]}"; do
-	for os in "${osVersions[@]}"; do
+		for os in "${osVersions[@]}"; do
         for server in "${webServers[@]}"; do
             for php in "${phpVersions[@]}"; do
                 # We don't want all the combinations, just existing folders:

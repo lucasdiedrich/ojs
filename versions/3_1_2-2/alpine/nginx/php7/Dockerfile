@@ -45,18 +45,18 @@ RUN apk add --update --no-cache $PACKAGES && \
     apk del --no-cache nodejs git && \
     find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
 
-COPY files/ /
+COPY root/ /
 
 # Copy nginx ojs.conf
-COPY config/nginx/conf.d/ojs.conf /etc/nginx/conf.d/default.conf
+# COPY root/etc/nginx/conf.d/ojs.conf /etc/nginx/conf.d/default.conf
 
 # Copy php configuration
-COPY config/php7/conf.d/0-ojs.ini /etc/php7/conf.d/0-ojs.ini
-COPY config/php7/php-fpm.d/www.conf /etc/php7/php-fpm.d/www.conf
-COPY config/php7/php-fpm.d/global.conf /etc/php7/php-fpm.d/global.conf
+# COPY root/php7/conf.d/0-ojs.ini /etc/php7/conf.d/0-ojs.ini
+# COPY root/php7/php-fpm.d/www.conf /etc/php7/php-fpm.d/www.conf
+# COPY root/php7/php-fpm.d/global.conf /etc/php7/php-fpm.d/global.conf
 
 # Copy supervisor configuration
-COPY config/supervisord.conf /etc/supervisord.conf
+# COPY root/etc/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 80 443
 

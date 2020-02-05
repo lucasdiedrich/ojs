@@ -29,7 +29,7 @@ services:
     restart: always
 
   ojs:
-    image: pkpofficial/ojs:%%OJS_VERSION%%
+    image: pkpofficial/ojs:3_1_2-1_nginx
     env_file:
       - .env
     container_name: "ojs_app_${COMPOSE_PROJECT_NAME}"
@@ -40,13 +40,12 @@ services:
       - "${HTTPS_PORT}:443"
     volumes:
       - /etc/localtime:/etc/localtime
-      - ./volumes/private:/var/www/files
-      - ./volumes/public:/var/www/html/public
-      - ./volumes/db:/var/lib/mysql
-      - ./volumes/logs:/var/log/apache2
+      - ./files/private:/var/www/files
+      - ./files/public:/var/www/html/public
+      - ./files/db:/var/lib/mysql
+      - ./files/logs:/var/log/nginx
        # Create files first, to avoid errors:
 #      - ./config/ojs.config.inc.php:/var/www/html/config.inc.php
-#      - ./config/apache.htaccess:/var/www/html/.htaccess
 #      - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
 
 #    labels:
@@ -72,4 +71,4 @@ services:
 #    networks:
 #      - inside
 #    depends_on:
-#      - db
+#      - db 
