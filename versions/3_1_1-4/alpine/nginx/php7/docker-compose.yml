@@ -9,9 +9,6 @@ version: "3.6"
 networks:
   inside:
     external: false
-#  traefik:
-#    external:
-#      name: traefik
 
 services:
   db:
@@ -40,35 +37,16 @@ services:
       - "${HTTPS_PORT}:443"
     volumes:
       - /etc/localtime:/etc/localtime
-      - ./files/private:/var/www/files
-      - ./files/public:/var/www/html/public
-      - ./files/db:/var/lib/mysql
-      - ./files/logs:/var/log/nginx
+      - ./volumes/private:/var/www/files
+      - ./volumes/public:/var/www/html/public
+      - ./volumes/db:/var/lib/mysql
+      - ./volumes/logs:/var/log/nginx
        # Create files first, to avoid errors:
 #      - ./config/ojs.config.inc.php:/var/www/html/config.inc.php
 #      - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
 
-#    labels:
-#      - "traefik.backend=${COMPOSE_PROJECT_NAME}_ojs"
-#      - "traefik.frontend.rule=Host:${PROJECT_DOMAIN}"
-#      - "traefik.docker.network=traefik"
-#      - "traefik.port=80"
-#      - traefik.enable=true
-
     networks:
       - inside
-#      - traefik
     depends_on:
       - db
     restart: always
-
-# Adminer support:
-# Usefull when you need to fix stuff in your ojs.
-#  adminer:
-#    image: adminer
-#    ports:
-#      - ${ADMINER_HTTP:9085}:8080
-#    networks:
-#      - inside
-#    depends_on:
-#      - db 

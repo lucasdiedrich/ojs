@@ -9,9 +9,6 @@ version: "3.6"
 networks:
   inside:
     external: false
-#  traefik:
-#    external:
-#      name: traefik
 
 services:
   db:
@@ -49,27 +46,8 @@ services:
 #      - ./config/apache.htaccess:/var/www/html/.htaccess
 #      - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
 
-#    labels:
-#      - "traefik.backend=${COMPOSE_PROJECT_NAME}_ojs"
-#      - "traefik.frontend.rule=Host:${PROJECT_DOMAIN}"
-#      - "traefik.docker.network=traefik"
-#      - "traefik.port=80"
-#      - traefik.enable=true
-
     networks:
       - inside
-#      - traefik
     depends_on:
       - db
     restart: always
-
-# Adminer support:
-# Usefull when you need to fix stuff in your ojs.
-#  adminer:
-#    image: adminer
-#    ports:
-#      - ${ADMINER_HTTP:9085}:8080
-#    networks:
-#      - inside
-#    depends_on:
-#      - db
