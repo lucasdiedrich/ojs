@@ -67,7 +67,7 @@ for versionNum in "${ojsVersions[@]}"; do
             for php in "${phpVersions[@]}"; do
                 # If exists, remove the existing version folder:
 								# MBR: Better remove or just overwrite it's content?
-                rm -Rf "versions/$versionNum"
+                rm -Rf "versions/$versionNum/$os/$server/$php"
 
 								if [[ -d "templates/webServers/$server/$php" ]]; then
 									  # Build the folder structure:
