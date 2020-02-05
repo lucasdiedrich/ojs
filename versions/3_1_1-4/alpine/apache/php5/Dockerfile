@@ -6,7 +6,7 @@ WORKDIR /var/www/html
 ENV COMPOSER_ALLOW_SUPERUSER=1  \
     SERVERNAME="localhost"      \
     HTTPS="on"                  \
-    OJS_VERSION=versions/3_1_1-4 \
+    OJS_VERSION=3_1_1-4 \
     OJS_CLI_INSTALL="0"         \
     OJS_DB_HOST="localhost"     \
     OJS_DB_USER="ojs"           \
@@ -134,7 +134,7 @@ RUN apk add --update --no-cache $PACKAGES && \
     apk del --no-cache nodejs git && rm -rf $EXCLUDE && \
     find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
 
-COPY files/ /
+COPY root/ /
 
 EXPOSE 80 443
 
