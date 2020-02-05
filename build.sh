@@ -73,7 +73,7 @@ for versionNum in "${ojsVersions[@]}"; do
 									  # Build the folder structure:
 										mkdir -p "versions/$versionNum/$os/$server/$php/root"
 										cp -a "templates/webServers/$server/$php" "versions/$versionNum/$os/$server"
-										cp -a "templates/common/ojs" "versions/$versionNum/$os/$server/$php/root"
+										cp -a "templates/common/ojs/usr" "versions/$versionNum/$os/$server/$php/root"
 										cp "templates/common/env" "versions/$versionNum/$os/$server/$php/.env"
 										# Variable substitutions in Dockerfile and docker-compose.yml:
 										sed -e "s!%%OJS_VERSION%%!$versionNum!g" \
