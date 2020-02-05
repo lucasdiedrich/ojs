@@ -37,11 +37,11 @@ services:
       - "${HTTPS_PORT}:443"
     volumes:
       - /etc/localtime:/etc/localtime
-      - ./volumes/private:/var/www/files
-      - ./volumes/public:/var/www/html/public
-      - ./volumes/db:/var/lib/mysql
-      - ./volumes/logs:/var/log/apache2
-       # Create files first, to avoid errors:
+       # Create files or folders first and check permisions, to avoid errors:
+#      - ./volumes/private:/var/www/files
+#      - ./volumes/public:/var/www/html/public
+#      - ./volumes/db:/var/lib/mysql
+#      - ./volumes/logs:/var/log/apache2
 #      - ./config/ojs.config.inc.php:/var/www/html/config.inc.php
 #      - ./config/apache.htaccess:/var/www/html/.htaccess
 #      - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
