@@ -3,15 +3,16 @@
 # ===============================================================================
 #          FILE:  build.sh
 #
-#         USAGE:  build [<versionNum>]
+#         USAGE:  build [<ojs>]
 #
 #   DESCRIPTION:  A script to generate the folder structure and required
 #                 files to run a full ojs stack.
 #
 #    PARAMETERS:
-#  <versionNum>:  (optional) The release version that you like to generate.
+#  <ojs>:  (optional) The release version that you like to generate.
 #                 If any, all the existing versions will be created.
 #  REQUIREMENTS:  ---
+#     TODO/BUGS:  ---
 #         NOTES:  ---
 #        AUTHOR:  Dulip Withanage, David Cormier, Marc Bria.
 #  ORGANIZATION:  Public Knowledge Project (PKP)
@@ -33,13 +34,15 @@ if [ ${#ojsVersions[@]} -eq 0 ]; then
     printf "Warning: This action is destructive. ALL former version folders will be removed.\n"
     [[ "$(read -e -p 'Are you sure you want to continue? [y/N]> '; echo $REPLY)" == [Yy]* ]]
 
-    # Versions need to fit with OJS tag names:
-    ojsVersions=(   "ojs-3_1_1-4" \
-                        "3_1_2-0" \
-                        "3_1_2-1" \
-                        "3_1_2-2" \
-                        "3_1_2-3" \
-                        "3_1_2-4" )
+    # Warning: Versions need to fit with OJS tag names:
+    ojsVersions=(        'master' \
+                    'ojs-2.4.8-5' \
+                    'ojs-3_1_1-4' \
+                        '3_1_2-0' \
+                        '3_1_2-1' \
+                        '3_1_2-2' \
+                        '3_1_2-3' \
+                        '3_1_2-4' )
 else
     if [ ${#ojsVersions[@]} -eq 1 ]; then
         if [[ -d "versions/$ojsVersions" ]]; then
@@ -55,46 +58,66 @@ fi
 ojsVersions=( "${ojsVersions[@]%/}" )
 
 # The OS, web servers and php versions that will be supported:
-osVersions=( alpine )
-webServers=( apache nginx )
-phpVersions=( php5 php7 )
+osVersions=( 'alpine' )
+webServers=( 'apache' 'nginx' )
+phpVersions=( 'php5' 'php7' )
 
-printf "\nBuilding Docker stacks for: $ojsVersions\n"
+# PHP support:
+php5=( 'ojs-2.4.8-5' 'ojs-3.1.1-4' )
+php7=( 'ojs-3_1_1-4' '3_1_2-0' '3_1_2-1' '3_1_2-2' '3_1_2-3' '3_1_2-4' 'master')
+
+printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
 printf "===================================\n\n"
 
-for versionNum in "${ojsVersions[@]}"; do
+for ojs in "${ojsVersions[@]}"; do
     for os in "${osVersions[@]}"; do
         for server in "${webServers[@]}"; do
             for php in "${phpVersions[@]}"; do
-                # If exists, remove the existing version folder:
-                # MBR: Better remove or overwrite it's content?
-                rm -Rf "versions/$versionNum/$os/$server/$php"
+                build=0
+                case $php in
+                    php5 )
+                        [[ " ${php5[@]} " =~ " ${ojs} " ]] && build=1
+                    ;;
+                    php7 )
+                        [[ " ${php7[@]} " =~ " ${ojs} " ]] && build=1
+                    ;;
+                esac
 
-                if [[ -d "templates/webServers/$server/$php" ]]; then
-                    # Build the folder structure:
-                    mkdir -p "versions/$versionNum/$os/$server/$php/root"
-                    cp -a "templates/webServers/$server/$php" "versions/$versionNum/$os/$server"
-                    cp -a "templates/common/ojs/usr" "versions/$versionNum/$os/$server/$php/root"
-                    cp "templates/common/env" "versions/$versionNum/$os/$server/$php/.env"
+                if [ ${build} -eq 1 ]; then
+                    # If exists, remove the existing version folder:
+                    # MBR: Better overwrite content instead of removing?
+                    rm -Rf "versions/$ojs/$os/$server/$php"
 
-                    # Variable substitutions in Dockerfile and docker-compose.yml:
-                    sed -e "s!%%OJS_VERSION%%!$versionNum!g" \
-                    "templates/dockerFiles/Dockerfile-$os-$server-$php.template" \
-                    > "versions/$versionNum/$os/$server/$php/Dockerfile"
-                    sed -e "s!%%OJS_VERSION%%!$versionNum!g" \
-                        "templates/dockerComposes/docker-compose-$server.template" \
-                        > "versions/$versionNum/$os/$server/$php/docker-compose.yml"
-                    # Helper script to build and run containers locally:
-                    sed -e "s!%%OJS_VERSION%%!$versionNum!g" \
-                    "templates/helpers/localMake.sh" \
-                    > "versions/$versionNum/$os/$server/$php/localMake.sh"
-                    printf "> $versionNum: [$server] $php (over $os)\n"
+                    if [[ -d "templates/webServers/$server/$php" ]]; then
+                        # Build the folder structure:
+                        mkdir -p "versions/$ojs/$os/$server/$php/root"
+                        cp -a "templates/webServers/$server/$php" "versions/$ojs/$os/$server"
+                        cp -a "templates/common/ojs/usr" "versions/$ojs/$os/$server/$php/root"
+                        cp "templates/common/env" "versions/$ojs/$os/$server/$php/.env"
+
+                        # Variable substitutions in Dockerfile and docker-compose.yml:
+                        sed -e "s!%%OJS_VERSION%%!$ojs!g" \
+                        "templates/dockerFiles/Dockerfile-$os-$server-$php.template" \
+                        > "versions/$ojs/$os/$server/$php/Dockerfile"
+                        sed -e "s!%%OJS_VERSION%%!$ojs!g" \
+                            "templates/dockerComposes/docker-compose-$server.template" \
+                            > "versions/$ojs/$os/$server/$php/docker-compose.yml"
+                        # Helper script to build and run containers locally:
+                        sed -e "s!%%OJS_VERSION%%!$ojs!g" \
+                        "templates/helpers/localMake.sh" \
+                        > "versions/$ojs/$os/$server/$php/localMake.sh"
+                        chmod +x "versions/$ojs/$os/$server/$php/localMake.sh"
+                        printf "BUILT:    $ojs: [$server] $php (over $os)\n"
+                    else
+                        printf "\nERROR when building $ojs: [$server] $php (over $os)\n"
+                        printf "Missing template for: templates/webservers/$server/$php\n\n"
+                        exit 0
+                    fi
                 else
-                    printf "\nERROR when building $versionNum: [$server] $php (over $os)\n"
-                    printf "Missing template for: templates/webservers/$server/$php\n\n"
-                    exit 0
+                    printf "DISABLED: $ojs: [$server] $php (over $os)\n"
                 fi
             done
         done
+        printf "\n"
     done
 done
