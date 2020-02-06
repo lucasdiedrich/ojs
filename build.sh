@@ -36,7 +36,7 @@ if [ ${#ojsVersions[@]} -eq 0 ]; then
 
     # Warning: Versions need to fit with OJS tag names:
     ojsVersions=(        'master' \
-                    'ojs-2.4.8-5' \
+                    'ojs-2_4_8-5' \
                     'ojs-3_1_1-4' \
                         '3_1_2-0' \
                         '3_1_2-1' \
@@ -63,7 +63,7 @@ webServers=( 'apache' 'nginx' )
 phpVersions=( 'php5' 'php7' )
 
 # PHP support:
-php5=( 'ojs-2.4.8-5' 'ojs-3.1.1-4' )
+php5=( 'ojs-2_4_8-5' 'ojs-3_1_1-4' )
 php7=( 'ojs-3_1_1-4' '3_1_2-0' '3_1_2-1' '3_1_2-2' '3_1_2-3' '3_1_2-4' 'master')
 
 printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
@@ -83,10 +83,10 @@ for ojs in "${ojsVersions[@]}"; do
                     ;;
                 esac
 
+                # Remover EVERY existing stack: Start from clean.
+                rm -Rf "versions/*"
+
                 if [ ${build} -eq 1 ]; then
-                    # If exists, remove the existing version folder:
-                    # MBR: Better overwrite content instead of removing?
-                    rm -Rf "versions/$ojs/$os/$server/$php"
 
                     if [[ -d "templates/webServers/$server/$php" ]]; then
                         # Build the folder structure:
