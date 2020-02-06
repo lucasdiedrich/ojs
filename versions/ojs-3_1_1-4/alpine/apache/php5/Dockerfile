@@ -116,11 +116,6 @@ RUN apk add --update --no-cache $PACKAGES && \
     git config --global advice.detachedHead false && \
     git clone --depth 1 --single-branch --branch $OJS_VERSION --progress https://github.com/pkp/ojs.git . && \
     git submodule update --init --recursive >/dev/null && \
-    # Install NPM and Composer Deps
-    composer update -d lib/pkp --no-dev && \
-    composer install -d plugins/paymethod/paypal --no-dev && \
-    composer install -d plugins/generic/citationStyleLanguage --no-dev && \
-    npm install -y && npm run build && \
     # Create directories
     mkdir -p /var/www/files /run/apache2  /run/supervisord/ && \
     cp config.TEMPLATE.inc.php config.inc.php && \
