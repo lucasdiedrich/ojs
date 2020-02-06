@@ -69,6 +69,9 @@ php7=( 'ojs-3_1_1-4' '3_1_2-0' '3_1_2-1' '3_1_2-2' '3_1_2-3' '3_1_2-4' 'master')
 printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
 printf "===================================\n\n"
 
+# Remove EVERY existing stack: Start from clean.
+rm -Rf versions/*
+
 for ojs in "${ojsVersions[@]}"; do
     for os in "${osVersions[@]}"; do
         for server in "${webServers[@]}"; do
@@ -82,9 +85,6 @@ for ojs in "${ojsVersions[@]}"; do
                         [[ " ${php7[@]} " =~ " ${ojs} " ]] && build=1
                     ;;
                 esac
-
-                # Remover EVERY existing stack: Start from clean.
-                rm -Rf "versions/*"
 
                 if [ ${build} -eq 1 ]; then
 

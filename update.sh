@@ -32,7 +32,7 @@ ojsVersions=( "$@" )
 
 # Otherwise, all the versions for the existing folders will be recreated.
 if [ ${#ojsVersions[@]} -eq 0 ]; then
-	ojsVersions=( versions/* )
+	ojsVersions=( "versions/*" )
 fi
 ojsVersions=( "${ojsVersions[@]%/}" )
 
@@ -51,21 +51,21 @@ phpVersions=( php5 php7 )
 
 printf "\nUpdating Docker stacks for: \n\n"
 
-for versionPath in "${ojsVersions[@]}"; do
+for ojs in "${ojsVersions[@]}"; do
     for os in "${osVersions[@]}"; do
         for server in "${webServers[@]}"; do
             for php in "${phpVersions[@]}"; do
                 # We don't want all the combinations, just existing folders:
-                [ -f "$versionPath/$os/$server/$php/Dockerfile" ] || continue
-                # Remove folder's prefix to get the version number:
-                version=( "${versionPath/'versions/'/}" )
+                [ -f "versions/$ojs/$os/$server/$php/Dockerfile" ] || continue
+#                # Remove folder's prefix to get the version number:
+                version=( "${ojs/'versions/'/}" )
                 # Replace OJS_VERSION in templates:
                 sed -e "s!%%OJS_VERSION%%!$version!g" \
                     "templates/dockerFiles/Dockerfile-$os-$server-$php.template" \
-                    > "$versionPath/$os/$server/$php/Dockerfile"
+                    > "versions/$ojs/$os/$server/$php/Dockerfile"
                 sed -e "s!%%OJS_VERSION%%!$version!g" \
                     "templates/dockerComposes/docker-compose-$server.template" \
-                    > "$versionPath/$os/$server/$php/docker-compose.yml"
+                    > "versions/$ojs/$os/$server/$php/docker-compose.yml"
                 echo "> $version: [$server] $php (over $os)"
             done
         done
