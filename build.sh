@@ -35,14 +35,28 @@ if [ ${#ojsVersions[@]} -eq 0 ]; then
     [[ "$(read -e -p 'Are you sure you want to continue? [y/N]> '; echo $REPLY)" == [Yy]* ]]
 
     # Warning: Versions need to fit with OJS tag names:
-    ojsVersions=(        'master' \
+    mapfile -t ojsVersions < versions.list
+
+    ojsVersions1=(        'master' \
                     'ojs-2_4_8-5' \
                     'ojs-3_1_1-4' \
+                    'ojs-3_1_1-2' \
+                    'ojs-3_1_1-1' \
+                    'ojs-3_1_1-0' \
+                    'ojs-3_1_0-1' \
+                    'ojs-3_1_0-0' \
+                    'ojs-3_0_2-0' \
+                    'ojs-3_0_1-0' \
+                    'ojs-3_0_0-0' \
+                    'ojs-3_0b1'   \
+                    'ojs-3_0a1'   \
                         '3_1_2-0' \
                         '3_1_2-1' \
                         '3_1_2-2' \
                         '3_1_2-3' \
                         '3_1_2-4' )
+
+
 else
     if [ ${#ojsVersions[@]} -eq 1 ]; then
         if [[ -d "versions/$ojsVersions" ]]; then
@@ -58,13 +72,32 @@ fi
 ojsVersions=( "${ojsVersions[@]%/}" )
 
 # The OS, web servers and php versions that will be supported:
-osVersions=( 'alpine' )
-webServers=( 'apache' 'nginx' )
+osVersions=(  'alpine' )
+webServers=(  'apache' 'nginx' )
 phpVersions=( 'php5' 'php7' )
 
 # PHP support:
-php5=( 'ojs-2_4_8-5' 'ojs-3_1_1-4' )
-php7=( 'ojs-3_1_1-4' '3_1_2-0' '3_1_2-1' '3_1_2-2' '3_1_2-3' '3_1_2-4' 'master')
+php5=(  'ojs-2_4_8-5' \
+        'ojs-3_1_1-4' \
+        'ojs-3_1_1-2' \
+        'ojs-3_1_1-1' \
+        'ojs-3_1_1-0' \
+        'ojs-3_1_0-1' \
+        'ojs-3_1_0-0' \
+        'ojs-3_0_2-0' \
+        'ojs-3_0_1-0' \
+        'ojs-3_0_0-0' \
+        'ojs-3_0b1'   \
+        'ojs-3_0a1' )
+
+php7=(  'ojs-3_1_1-4' \
+            '3_1_2-0' \
+            '3_1_2-1' \
+            '3_1_2-2' \
+            '3_1_2-3' \
+            '3_1_2-4' \
+            '3_2_0-0' \
+            'master' )
 
 printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
 printf "===================================\n\n"
