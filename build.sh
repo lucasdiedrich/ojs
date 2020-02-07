@@ -37,26 +37,6 @@ if [ ${#ojsVersions[@]} -eq 0 ]; then
     # Warning: Versions need to fit with OJS tag names:
     mapfile -t ojsVersions < versions.list
 
-    ojsVersions1=(        'master' \
-                    'ojs-2_4_8-5' \
-                    'ojs-3_1_1-4' \
-                    'ojs-3_1_1-2' \
-                    'ojs-3_1_1-1' \
-                    'ojs-3_1_1-0' \
-                    'ojs-3_1_0-1' \
-                    'ojs-3_1_0-0' \
-                    'ojs-3_0_2-0' \
-                    'ojs-3_0_1-0' \
-                    'ojs-3_0_0-0' \
-                    'ojs-3_0b1'   \
-                    'ojs-3_0a1'   \
-                        '3_1_2-0' \
-                        '3_1_2-1' \
-                        '3_1_2-2' \
-                        '3_1_2-3' \
-                        '3_1_2-4' )
-
-
 else
     if [ ${#ojsVersions[@]} -eq 1 ]; then
         if [[ -d "versions/$ojsVersions" ]]; then
