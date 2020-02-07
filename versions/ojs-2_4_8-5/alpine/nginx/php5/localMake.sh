@@ -1,8 +1,6 @@
 #!/bin/bash
 
-version=ojs-2_4_8-5
+docker build -t local/ojs:"ojs-2_4_8-5" .
 
-docker build -t local/ojs:"$version" .
-
-sed -i "s!pkpofficial/$version!local/$version!g" \
+sed -i "s!pkpofficial/ojs:!local/ojs:!g" \
        "docker-compose.yml"

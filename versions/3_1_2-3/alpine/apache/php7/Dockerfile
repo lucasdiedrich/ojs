@@ -26,27 +26,30 @@ RUN apk add --update --no-cache $PACKAGES && \
     git config --global url.https://.insteadOf git:// && \
     git config --global advice.detachedHead false && \
     git clone --depth 1 --single-branch --branch $OJS_VERSION --progress https://github.com/pkp/ojs.git . && \
-    git submodule update --init --recursive >/dev/null && \
-    # Install NPM and Composer Deps
-    composer update -d lib/pkp --no-dev && \
+    git submodule update --init --recursive >/dev/null
+
+# Install NPM and Composer Deps
+RUN composer update -d lib/pkp --no-dev && \
     composer install -d plugins/paymethod/paypal --no-dev && \
     composer install -d plugins/generic/citationStyleLanguage --no-dev && \
-    npm install -y && npm run build && \
-    # Create directories
-    mkdir -p /var/www/files /run/apache2  /run/supervisord/ && \
+    npm install -y && npm run build
+
+# Create directories
+RUN mkdir -p /var/www/files /run/apache2  /run/supervisord/ && \
     cp config.TEMPLATE.inc.php config.inc.php && \
     chown -R apache:apache /var/www/* && \
     # Prepare crontab
     echo "0 * * * *   ojs-run-scheduled" | crontab - && \
     # Prepare httpd.conf
     sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf && \
-    sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf && \
-    # Clear the image
-    curl "$EXCLUDE_URL" -o ./excludeVar.list && \
-    source ./excludeVar.list && \
-    rm -rf $EXCLUDE && \
+    sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf
+
+# Clear the image (list of files to be deleted in exclude.list).
+COPY exclude.list /tmp/exclude.list
+RUN rm -rf $(cat /tmp/exclude.list) && \
     apk del --no-cache nodejs git && \
     find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
+
 
 COPY root/ /
 
