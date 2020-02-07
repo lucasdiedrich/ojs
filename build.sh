@@ -107,6 +107,7 @@ for ojs in "${ojsVersions[@]}"; do
                         cp -a "templates/webServers/$server/$php" "versions/$ojs/$os/$server"
                         cp -a "templates/common/ojs/usr" "versions/$ojs/$os/$server/$php/root"
                         cp "templates/common/env" "versions/$ojs/$os/$server/$php/.env"
+                        cp "templates/exclude.list" "versions/$ojs/$os/$server/$php/exclude.list"
 
                         # Variable substitutions in Dockerfile and docker-compose.yml:
                         sed -e "s!%%OJS_VERSION%%!$ojs!g" \
