@@ -1,0 +1,23 @@
+#!/bin/sh
+
+KEY_PATH="/etc/ssl/apache2/server.key"
+PEM_PATH="/etc/ssl/apache2/server.pem"
+
+echo "[OJS Pre-Start] Enforcing configs..."
+
+sed -i -e "s/www.example.com/${SERVERNAME}/g" $OJS_WEB_CONF
+sed -i -e "s/^#ServerName.*/ServerName ${SERVERNAME}/" /etc/apache2/httpd.conf
+sed -i -e "s/restful_urls = Off/restful_urls = On/g" $OJS_CONF
+sed -i -e "s/enable_cdn = On/enable_cdn = Off/g" $OJS_CONF
+
+# Generate a cert based on ServerName
+if [ ! -f $KEY_PATH ] ||
+    [[ `openssl x509 -in $PEM_PATH -noout -subject | cut -d '/' -f2-` == *$SERVERNAME* ]]; then
+    echo "[OJS Pre-Start] Generating certs ..."
+    openssl req -x509 -nodes -days 1460 -newkey rsa:2048 -keyout $KEY_PATH -out $PEM_PATH -subj "/CN=$SERVERNAME/"
+fi
+
+if [[ ${OJS_CLI_INSTALL} == "1" ]] &&
+    grep -q 'installed = Off' $OJS_CONF ; then
+    ojs-cli-install
+fi
