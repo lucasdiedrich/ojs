@@ -113,14 +113,14 @@ for ojs in "${ojsVersions[@]}"; do
                         sed -e "s!%%OJS_VERSION%%!$ojs!g" \
                         "templates/dockerFiles/Dockerfile-$os-$server-$php.template" \
                         > "versions/$ojs/$os/$server/$php/Dockerfile"
-                        sed -e "s!%%OJS_VERSION%%!$ojs!g" \
+                        # docker-compose with remote images
+                        sed -e "s!%%OJS_VERSION%%!$ojs!g" -e "s!%%OJS_IMAGE%%!pkpofficial/ojs!g" \
                             "templates/dockerComposes/docker-compose-$server.template" \
                             > "versions/$ojs/$os/$server/$php/docker-compose.yml"
-                        # Helper script to build and run containers locally:
-                        sed -e "s!%%OJS_VERSION%%!$ojs!g" \
-                        "templates/helpers/localMake.sh" \
-                        > "versions/$ojs/$os/$server/$php/localMake.sh"
-                        chmod +x "versions/$ojs/$os/$server/$php/localMake.sh"
+                        # docker-compose with local images
+                        sed -e "s!%%OJS_VERSION%%!$ojs!g" -e "s!%%OJS_IMAGE%%!ojs!g" \
+                            "templates/dockerComposes/docker-compose-$server.template" \
+                            > "versions/$ojs/$os/$server/$php/docker-compose-local.yml"
                         printf "BUILT:    $ojs: [$server] $php (over $os)\n"
                     else
                         printf "\nERROR when building $ojs: [$server] $php (over $os)\n"

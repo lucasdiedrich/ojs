@@ -26,7 +26,7 @@ services:
     restart: always
 
   ojs:
-    image: pkpofficial/ojs:%%OJS_VERSION%%_nginx
+    image: %%OJS_IMAGE%%:%%OJS_VERSION%%_nginx
     env_file:
       - .env
     container_name: "ojs_app_${COMPOSE_PROJECT_NAME}"
