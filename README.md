@@ -22,7 +22,13 @@ For all available versions, this project provides a [docker-compose](https://doc
    ```
 1. Access **http://127.0.0.1:8080/index/install** and continue through web installation and finish your installation procedure and configurations.
    Note that the database connection needs the following options unless you make changes through the [environment variables](#environment-variables):
-  - **URL**: `db` (which is the name of the container in the internal Docker network)
+  - **Database driver**: `MySQLi`
+  - **Host**: `db` (which is the name of the container in the internal Docker network)
+  - **Username**: `ojs`
+  - **Password**: `ojs`
+  - **Database name**: `ojs`
+  - _Uncheck_ "Create new database"
+  - _Uncheck_ "Beacon"
 
 To go through the OJS installation process automatically, set the environment variable `OJS_CLI_INSTALL=1`, and use the other environment variables to automatize the process.
 
