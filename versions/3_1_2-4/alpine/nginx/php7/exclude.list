@@ -77,12 +77,15 @@ lib/pkp/lib/vendor/robloach/component-installer/tests/
 lib/pkp/lib/vendor/phpmailer/phpmailer/test/
 node_modules
 .babelrc
+babel.config.js
 .editorconfig
 .eslintignore
 .eslintrc.js
 .postcssrc.js
 package.json
+package-lock.json
 webpack.config.js
+vue.config.js
 lib/ui-library
 /usr/local/bin/composer
 /root/.composer

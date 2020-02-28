@@ -54,7 +54,7 @@ ojsVersions=( "${ojsVersions[@]%/}" )
 # The OS, web servers and php versions that will be supported:
 osVersions=(  'alpine' )
 webServers=(  'apache' 'nginx' )
-phpVersions=( 'php5' 'php7' )
+phpVersions=( 'php5' 'php7' 'php72' )
 
 # PHP support:
 php5=(  'ojs-2_4_8-5' \
@@ -76,8 +76,10 @@ php7=(  'ojs-3_1_1-4' \
             '3_1_2-2' \
             '3_1_2-3' \
             '3_1_2-4' \
-            '3_2_0-0' \
-            'master' )
+	    '3_2_0-0' )
+
+php72=(     'master'  \
+            '3_2_0-0' )
 
 printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
 printf "===================================\n\n"
@@ -97,6 +99,9 @@ for ojs in "${ojsVersions[@]}"; do
                     php7 )
                         [[ " ${php7[@]} " =~ " ${ojs} " ]] && build=1
                     ;;
+                    php72 )
+                        [[ " ${php72[@]} " =~ " ${ojs} " ]] && build=1
+		    ;;
                 esac
 
                 if [ ${build} -eq 1 ]; then
