@@ -53,35 +53,34 @@ ojsVersions=( "${ojsVersions[@]%/}" )
 
 # The OS, web servers and php versions that will be supported:
 osVersions=(  'alpine' )
-webServers=(  'apache' 'nginx' )
-phpVersions=( 'php5' 'php7' 'php73' )
+webServers=(  'apache' )
+# webServers=(  'apache' 'nginx' )
+# phpVersions=( 'php5' 'php7' 'php73' )
+phpVersions=( 'php7' 'php73' )
 
 # PHP support:
-# php5=(  'ojs-2_4_8-5' \
-#		'ojs-3_1_1-4' \
-#		'ojs-3_1_1-2' \
-#		'ojs-3_1_1-1' \
-#		'ojs-3_1_1-0' \
-#		'ojs-3_1_0-1' \
-#		'ojs-3_1_0-0' \
-#		'ojs-3_0_2-0' \
-#		'ojs-3_0_1-0' \
-#		'ojs-3_0_0-0' \
-#		'ojs-3_0b1'   \
-#		'ojs-3_0a1' )
-
+php5=(  'ojs-2_4_8-5' \
+		'ojs-3_1_1-4' \
+		'ojs-3_1_1-2' \
+		'ojs-3_1_1-1' \
+		'ojs-3_1_1-0' \
+		'ojs-3_1_0-1' \
+		'ojs-3_1_0-0' \
+		'ojs-3_0_2-0' \
+		'ojs-3_0_1-0' \
+		'ojs-3_0_0-0' \
+		'ojs-3_0b1'   \
+		'ojs-3_0a1' )
 
 php7=(  'ojs-3_1_1-4' \
 		'3_1_2-0' \
 		'3_1_2-1' \
 		'3_1_2-2' \
 		'3_1_2-3' \
-		'3_1_2-4' \
-		'3_2_0-0' )
+		'3_1_2-4' )
 
 php73=( 'master'  \
-		'3_1_2-4' \
-		'3_2_0-0' )
+		'3_1_2-4' )
 
 printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
 printf "===================================\n\n"
@@ -119,8 +118,17 @@ for ojs in "${ojsVersions[@]}"; do
 						cp "templates/common/env" "versions/$ojs/$os/$server/$php/.env"
 						cp "templates/exclude.list" "versions/$ojs/$os/$server/$php/exclude.list"
 
-						# Build persistent folders:
-						mkdir -p "versions/$ojs/$os/$server/$php/volumes"
+						# Create persistent folders (with right permissions):
+						mkdir -p "versions/$ojs/$os/$server/$php/volumes/private"
+						mkdir -p "versions/$ojs/$os/$server/$php/volumes/public"
+						mkdir -p "versions/$ojs/$os/$server/$php/volumes/logs"
+						chown 100:101 "versions/$ojs/$os/$server/$php/volumes" -Rf
+						mkdir -p "versions/$ojs/$os/$server/$php/volumes/db"
+						chown 999:999 "versions/$ojs/$os/$server/$php/volumes/db" -Rf
+
+						# Here we can uncomment the volumes in docker-compose
+						# but probably is better keeping different docker-composes
+						# for production or development... so "do nothing".
 
 						# Variable substitutions in Dockerfile and docker-compose.yml:
 						sed -e "s!%%OJS_VERSION%%!$ojs!g" \
