@@ -11,7 +11,7 @@
 #    PARAMETERS:
 #  <ojs>:  (optional) The release version that you like to generate.
 #                 If any, all the existing versions will be created.
-#  REQUIREMENTS:  ---
+#  REQUIREMENTS:  mapfile
 #     TODO/BUGS:  ---
 #         NOTES:  ---
 #        AUTHOR:  Dulip Withanage, David Cormier, Marc Bria.
@@ -19,7 +19,7 @@
 #       LICENSE:  GPL 3
 #       CREATED:  04/02/2020 23:50:15 CEST
 #       UPDATED:  07/03/2020 01:06:25 CEST
-#      REVISION:  1.0
+#      REVISION:  1.1
 #===============================================================================
 
 set -Eeuo pipefail
@@ -49,35 +49,40 @@ else
 		exit 0
 	fi
 fi
+
+# All the OJS versions:
 ojsVersions=( "${ojsVersions[@]%/}" )
 
-# The OS, web servers and php versions that will be supported:
-osVersions=(  'alpine' )
+# All the OS:
+osVersions=( 'alpine' )
+
+# All the Webservers:
 webServers=(  'apache' )
 # webServers=(  'apache' 'nginx' )
-# phpVersions=( 'php5' 'php7' 'php73' )
-phpVersions=( 'php7' 'php73' )
 
-# PHP support:
+# All PHP versions:
+phpVersions=( 'php7' 'php73' )
+# phpVersions=( 'php5' 'php7' 'php73' )
+
+# PHP support for each ojs version:
 php5=(  'ojs-2_4_8-5' \
-		'ojs-3_1_1-4' \
-		'ojs-3_1_1-2' \
-		'ojs-3_1_1-1' \
-		'ojs-3_1_1-0' \
-		'ojs-3_1_0-1' \
-		'ojs-3_1_0-0' \
 		'ojs-3_0_2-0' \
 		'ojs-3_0_1-0' \
 		'ojs-3_0_0-0' \
 		'ojs-3_0b1'   \
 		'ojs-3_0a1' )
 
-php7=(  'ojs-3_1_1-4' \
-		'3_1_2-0' \
-		'3_1_2-1' \
-		'3_1_2-2' \
-		'3_1_2-3' \
-		'3_1_2-4' )
+php7=(  'ojs-3_1_0-0' \
+		'ojs-3_1_0-1' \
+		'ojs-3_1_1-0' \
+		'ojs-3_1_1-1' \
+		'ojs-3_1_1-2' \
+		'ojs-3_1_1-4' \
+			'3_1_2-0' \
+			'3_1_2-1' \
+			'3_1_2-2' \
+			'3_1_2-3' \
+			'3_1_2-4' )
 
 php73=( 'master'  \
 		'3_1_2-4' )
@@ -92,6 +97,13 @@ for ojs in "${ojsVersions[@]}"; do
 	for os in "${osVersions[@]}"; do
 		for server in "${webServers[@]}"; do
 			for php in "${phpVersions[@]}"; do
+
+				# OJS tagging changed it syntax between versions.
+				# To keep a single criteria, in Docker the syntax is
+				# unified and we always use the version number (without prefix).
+				# Ie: "ojs-3_1_1-4 will" be tagged as "3_1_1-4"
+				ojsNum=${ojs#"ojs-"}
+
 				build=0
 				case $php in
 					php5 )
@@ -112,19 +124,19 @@ for ojs in "${ojsVersions[@]}"; do
 
 					if [[ -d "templates/webServers/$server/$php" ]]; then
 						# Build the folder structure:
-						mkdir -p "versions/$ojs/$os/$server/$php/root"
-						cp -a "templates/webServers/$server/$php" "versions/$ojs/$os/$server"
-						cp -a "templates/common/ojs/usr" "versions/$ojs/$os/$server/$php/root"
-						cp "templates/common/env" "versions/$ojs/$os/$server/$php/.env"
-						cp "templates/exclude.list" "versions/$ojs/$os/$server/$php/exclude.list"
+						mkdir -p "versions/$ojsNum/$os/$server/$php/root"
+						cp -a "templates/webServers/$server/$php" "versions/$ojsNum/$os/$server"
+						cp -a "templates/common/ojs/usr" "versions/$ojsNum/$os/$server/$php/root"
+						cp "templates/common/env" "versions/$ojsNum/$os/$server/$php/.env"
+						cp "templates/exclude.list" "versions/$ojsNum/$os/$server/$php/exclude.list"
 
 						# Create persistent folders (with right permissions):
-						mkdir -p "versions/$ojs/$os/$server/$php/volumes/private"
-						mkdir -p "versions/$ojs/$os/$server/$php/volumes/public"
-						mkdir -p "versions/$ojs/$os/$server/$php/volumes/logs"
-						chown 100:101 "versions/$ojs/$os/$server/$php/volumes" -Rf
-						mkdir -p "versions/$ojs/$os/$server/$php/volumes/db"
-						chown 999:999 "versions/$ojs/$os/$server/$php/volumes/db" -Rf
+						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/private"
+						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/public"
+						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs"
+						chown 100:101 "versions/$ojsNum/$os/$server/$php/volumes" -Rf
+						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/db"
+						chown 999:999 "versions/$ojsNum/$os/$server/$php/volumes/db" -Rf
 
 						# Here we can uncomment the volumes in docker-compose
 						# but probably is better keeping different docker-composes
@@ -133,24 +145,25 @@ for ojs in "${ojsVersions[@]}"; do
 						# Variable substitutions in Dockerfile and docker-compose.yml:
 						sed -e "s!%%OJS_VERSION%%!$ojs!g" \
 						"templates/dockerFiles/Dockerfile-$os-$server-$php.template" \
-						> "versions/$ojs/$os/$server/$php/Dockerfile"
+						> "versions/$ojsNum/$os/$server/$php/Dockerfile"
+
 						# docker-compose with remote images
-						sed -e "s!%%OJS_VERSION%%!$ojs!g" -e "s!%%OJS_IMAGE%%!pkpofficial/ojs!g" \
+						sed -e "s!%%OJS_VERSION%%!$ojsNum!g" -e "s!%%OJS_IMAGE%%!pkpofficial/ojs!g" \
 						    "templates/dockerComposes/docker-compose-$server.template" \
-						    > "versions/$ojs/$os/$server/$php/docker-compose.yml"
+						    > "versions/$ojsNum/$os/$server/$php/docker-compose.yml"
 						# docker-compose with local images
-						cp "versions/$ojs/$os/$server/$php/docker-compose.yml" \
-							"versions/$ojs/$os/$server/$php/docker-compose-local.yml" -a
+						cp "versions/$ojsNum/$os/$server/$php/docker-compose.yml" \
+							"versions/$ojsNum/$os/$server/$php/docker-compose-local.yml" -a
 						sed -i "s!pkpofficial/ojs:!local/ojs:!g" \
-							"versions/$ojs/$os/$server/$php/docker-compose-local.yml"
-						printf "BUILT:    $ojs: [$server] $php (over $os)\n"
+							"versions/$ojsNum/$os/$server/$php/docker-compose-local.yml"
+						printf "BUILT:    $ojsNum: [$server] $php (over $os)\n"
 					else
 						printf "\nERROR when building $ojs: [$server] $php (over $os)\n"
 						printf "Missing template for: templates/webservers/$server/$php\n\n"
 						exit 0
 					fi
 				else
-					printf "DISABLED: $ojs: [$server] $php (over $os)\n"
+					printf "DISABLED: $ojsNum: [$server] $php (over $os)\n"
 				fi
 			done
 		done
