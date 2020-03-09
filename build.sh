@@ -57,18 +57,19 @@ webServers=(  'apache' 'nginx' )
 phpVersions=( 'php5' 'php7' 'php73' )
 
 # PHP support:
-php5=(  'ojs-2_4_8-5' \
-		'ojs-3_1_1-4' \
-		'ojs-3_1_1-2' \
-		'ojs-3_1_1-1' \
-		'ojs-3_1_1-0' \
-		'ojs-3_1_0-1' \
-		'ojs-3_1_0-0' \
-		'ojs-3_0_2-0' \
-		'ojs-3_0_1-0' \
-		'ojs-3_0_0-0' \
-		'ojs-3_0b1'   \
-		'ojs-3_0a1' )
+# php5=(  'ojs-2_4_8-5' \
+#		'ojs-3_1_1-4' \
+#		'ojs-3_1_1-2' \
+#		'ojs-3_1_1-1' \
+#		'ojs-3_1_1-0' \
+#		'ojs-3_1_0-1' \
+#		'ojs-3_1_0-0' \
+#		'ojs-3_0_2-0' \
+#		'ojs-3_0_1-0' \
+#		'ojs-3_0_0-0' \
+#		'ojs-3_0b1'   \
+#		'ojs-3_0a1' )
+
 
 php7=(  'ojs-3_1_1-4' \
 		'3_1_2-0' \
@@ -117,6 +118,9 @@ for ojs in "${ojsVersions[@]}"; do
 						cp -a "templates/common/ojs/usr" "versions/$ojs/$os/$server/$php/root"
 						cp "templates/common/env" "versions/$ojs/$os/$server/$php/.env"
 						cp "templates/exclude.list" "versions/$ojs/$os/$server/$php/exclude.list"
+
+						# Build persistent folders:
+						mkdir -p "versions/$ojs/$os/$server/$php/volumes"
 
 						# Variable substitutions in Dockerfile and docker-compose.yml:
 						sed -e "s!%%OJS_VERSION%%!$ojs!g" \
