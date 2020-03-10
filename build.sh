@@ -143,7 +143,7 @@ for ojs in "${ojsVersions[@]}"; do
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/public"
 						echo "Folder to keep persistent your PUBLIC files \
 							  (uncomment the volume docker-compose.yml)" \
-							  > "versions/$ojsNum/$os/$server/$php/volumes/private/README"
+							  > "versions/$ojsNum/$os/$server/$php/volumes/public/README"
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs"
 						echo "Folder to map and keep persistent your web logs \
 							  (uncomment the volume docker-compose.yml)" \
@@ -152,7 +152,7 @@ for ojs in "${ojsVersions[@]}"; do
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/db"
 						echo "Folder to keep persistent your DB files \
 							  (uncomment the volume docker-compose.yml)" \
-							  > "versions/$ojsNum/$os/$server/$php/volumes/private/README"
+							  > "versions/$ojsNum/$os/$server/$php/volumes/db/README"
 						chown 999:999 "versions/$ojsNum/$os/$server/$php/volumes/db" -Rf
 
 						# Here we can uncomment the volumes in docker-compose
