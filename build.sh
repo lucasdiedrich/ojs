@@ -137,14 +137,22 @@ for ojs in "${ojsVersions[@]}"; do
 
 						# Create persistent folders (with right permissions):
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/private"
-						touch "versions/$ojsNum/$os/$server/$php/volumes/private/.gitkeep"
+						echo "Folder to keep persistent your PRIVATE files \
+							  (uncomment the volume in docker-compose.yml)" \
+							  > "versions/$ojsNum/$os/$server/$php/volumes/private/README"
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/public"
-						touch "versions/$ojsNum/$os/$server/$php/volumes/public/.gitkeep"
+						echo "Folder to keep persistent your PUBLIC files \
+							  (uncomment the volume docker-compose.yml)" \
+							  > "versions/$ojsNum/$os/$server/$php/volumes/private/README"
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs"
-						touch "versions/$ojsNum/$os/$server/$php/volumes/logs/.gitkeep"
+						echo "Folder to map and keep persistent your web logs \
+							  (uncomment the volume docker-compose.yml)" \
+							  > "versions/$ojsNum/$os/$server/$php/volumes/logs/README"
 						chown 100:101 "versions/$ojsNum/$os/$server/$php/volumes" -Rf
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/db"
-						touch "versions/$ojsNum/$os/$server/$php/volumes/db/.gitkeep"
+						echo "Folder to keep persistent your DB files \
+							  (uncomment the volume docker-compose.yml)" \
+							  > "versions/$ojsNum/$os/$server/$php/volumes/private/README"
 						chown 999:999 "versions/$ojsNum/$os/$server/$php/volumes/db" -Rf
 
 						# Here we can uncomment the volumes in docker-compose
