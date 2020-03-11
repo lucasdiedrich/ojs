@@ -90,6 +90,7 @@ php7=(  'ojs-3_0a1'   \
 			'3_1_2-4' )
 
 php73=( 'master'  \
+		'3_2_0-0' \
 		'3_1_2-4' )
 
 printf "\n\nBUILDING OJS OFFICIAL DOCKER STACKS\n"
