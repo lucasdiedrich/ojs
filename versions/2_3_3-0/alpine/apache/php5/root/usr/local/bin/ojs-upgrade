@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "[OJS Upgrade] Changing to installed off"
+sed -i '/^installed/c\installed = Off' $OJS_CONF
+
+echo "[OJS Upgrade] Upgrading..."
+php /var/www/html/tools/upgrade.php upgrade
+
+echo "[OJS Upgrade] Changing to installed on"
+sed -i '/^installed/c\installed = On' $OJS_CONF
+
+echo "[OJS Upgrade] Upgrade is done, please restart the container."

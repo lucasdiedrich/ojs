@@ -13,7 +13,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1  \
 	OJS_DB_USER="ojs"           \
 	OJS_DB_PASSWORD="ojs"       \
 	OJS_DB_NAME="ojs"           \
-	OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf"   \
+	OJS_WEB_CONF="/etc/apache2/conf.d/ojs.conf"	\
 	OJS_CONF="/var/www/html/config.inc.php"
 
 

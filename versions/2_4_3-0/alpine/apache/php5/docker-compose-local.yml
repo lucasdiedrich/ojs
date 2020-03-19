@@ -1,0 +1,53 @@
+# File: docker-compose.yml
+# Access via "http://localhost:8081"
+#
+# Call example:
+# $ docker-compose up
+
+version: "3.6"
+
+networks:
+  inside:
+    external: false
+
+services:
+  db:
+    image: mariadb:10.2
+    env_file:
+      - .env
+    container_name: "ojs_db_${COMPOSE_PROJECT_NAME}"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - inside
+    restart: always
+
+  ojs:
+    image: local/ojs:2_4_3-0
+    env_file:
+      - .env
+    container_name: "ojs_app_${COMPOSE_PROJECT_NAME}"
+    hostname: "${COMPOSE_PROJECT_NAME}"
+    restart: always
+    ports:
+      - "${HTTP_PORT}:80"
+      - "${HTTPS_PORT}:443"
+    volumes:
+      - /etc/localtime:/etc/localtime
+       # Create files or folders first and check permisions, to avoid errors:
+#      - ./volumes/private:/var/www/files
+#      - ./volumes/public:/var/www/html/public
+#      - ./volumes/db:/var/lib/mysql
+#      - ./volumes/logs:/var/log/apache2
+#      - ./config/ojs.config.inc.php:/var/www/html/config.inc.php
+#      - ./config/apache.htaccess:/var/www/html/.htaccess
+#      - ./config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
+
+    networks:
+      - inside
+    depends_on:
+      - db
+    restart: always
