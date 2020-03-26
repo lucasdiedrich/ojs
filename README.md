@@ -1,7 +1,7 @@
 # OJS (Open Journal Systems) - PKP - Container/Docker
 
-| **IMPORTANT: This repostitoy is still pre-alpha, so it can't be used in testing or production evironments.** |
-|:------------------------------------------------------------------------------------------------------------:|
+| **IMPORTANT: This repostitoy is still beta, so it can't be used in production evironments.** |
+|:--------------------------------------------------------------------------------------------:|
 
 Open Journal Systems (OJS) is a journal management and publishing system that has been developed by the [Public Knowledge Project](https://pkp.sfu.ca/) through its federally funded efforts to expand and improve access to research.
 
