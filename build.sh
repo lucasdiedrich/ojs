@@ -189,24 +189,38 @@ for ojs in "${ojsVersions[@]}"; do
 						cp "templates/exclude.list" "versions/$ojsNum/$os/$server/$php/exclude.list"
 
 						# Create persistent folders (with right permissions):
+                                                mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/config"
+                                                echo "Folder to keep persistent your CONFIG files \
+                                                          (uncomment the volume files in docker-compose.yml)" \
+                                                          > "versions/$ojsNum/$os/$server/$php/volumes/config/README"
+
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/private"
 						echo "Folder to keep persistent your PRIVATE files \
 							  (uncomment the volume in docker-compose.yml)" \
 							  > "versions/$ojsNum/$os/$server/$php/volumes/private/README"
+
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/public"
 						echo "Folder to keep persistent your PUBLIC files \
 							  (uncomment the volume docker-compose.yml)" \
 							  > "versions/$ojsNum/$os/$server/$php/volumes/public/README"
-						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs"
+						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs/app"
+
 						echo "Folder to map and keep persistent your web logs \
 							  (uncomment the volume docker-compose.yml)" \
 							  > "versions/$ojsNum/$os/$server/$php/volumes/logs/README"
 						chown 100:101 "versions/$ojsNum/$os/$server/$php/volumes" -Rf
+
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/db"
 						echo "Folder to keep persistent your DB files \
 							  (uncomment the volume docker-compose.yml)" \
 							  > "versions/$ojsNum/$os/$server/$php/volumes/db/README"
 						chown 999:999 "versions/$ojsNum/$os/$server/$php/volumes/db" -Rf
+
+                                                mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs/db"
+                                                echo "Folder to keep persistent your DB logs \
+                                                          (uncomment the volume docker-compose.yml)" \
+                                                          > "versions/$ojsNum/$os/$server/$php/volumes/db/README"
+						chown 999:999 "versions/$ojsNum/$os/$server/$php/volumes/logs/db" -Rf
 
 						# Here we can uncomment the volumes in docker-compose
 						# but probably is better keeping different docker-composes
