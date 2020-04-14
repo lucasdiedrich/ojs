@@ -48,6 +48,7 @@ ENV PHP_EXTENSIONS	\
 	php7-fileinfo	\
 	php7-ftp		\
 	php7-gettext	\
+	php7-intl		\
 	php7-iconv		\
 	php7-json		\
 	php7-mbstring	\
