@@ -13,8 +13,8 @@ networks:
 services:
   db:
     image: mariadb:10.2
-    env_file:
-      - .env
+#    env_file:
+#      - .env
     container_name: "ojs_db_${COMPOSE_PROJECT_NAME:-demo}"
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-ojs}"
@@ -32,8 +32,8 @@ services:
 
   ojs:
     image: local/ojs:2_2_3-0
-    env_file:
-      - .env
+#    env_file:
+#      - .env
     container_name: "ojs_app_${COMPOSE_PROJECT_NAME:-demo}"
     hostname: "${COMPOSE_PROJECT_NAME:-demo}"
     restart: always
