@@ -1,20 +1,21 @@
 # OJS (Open Journal Systems) - PKP - Container/Docker
 
 
-| **IMPORTANT:** This repository is still beta, so it can't be used in production environments. |
-|:---------------------------------------------------------:|
-| We are actively working to release a stable version soon. Keep tuned. |
+| **IMPORTANT:** |
+|:---------------------------------------------------------|
+| **This repository is still beta, so it can't be used in production environments.** <br />We are actively working to release a stable version soon. Keep tuned. |
 
 
 Open Journal Systems (OJS) is a journal management and publishing system that has been developed by the [Public Knowledge Project](https://pkp.sfu.ca/) through its federally funded efforts to expand and improve access to research.
 
-The images in this repository are built on top of [Alpine Linux](https://alpinelinux.org/) and come in several variants, see [Versions](#versions).
+The images in this repository are built on top of [Alpine Linux](https://alpinelinux.org/) and come in several variants (see [Versions](#versions)).
+
 This repository is a fork of the work formerly done by [Lucas Dietrich](https://github.com/lucasdiedrich/ojs).
 
 
-## Demo
+<!-- ## Demo
 
-The fastest way to test docker-ojs is running the last stable OJS release with "Play with docker".
+The fastest way to test docker-ojs is running the stack over "Play with docker".
 
 Just click the following link and create a user:
 
@@ -22,14 +23,18 @@ Just click the following link and create a user:
 
 Then wait till the containers are built and click in the 8080 port link to get a fresh clean demo with the last stable ojs version.
 
-| **TIP:** Change the version in the url if you want to test an old version. |
-|:-----------------------------------------------------------:|
+| **TIP:**                                                                  |
+|:--------------------------------------------------------------------------|
+| Change the version number in [this url](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/pkp/docker-ojs/master/versions/3_2_0-2/alpine/apache/php73/docker-compose.yml) if you want to test an older version. |
+-->
 
 ## How to use
 
-If you want to run it locally or in your own server, first you need to install docker (docker-compose is also recommeneded).
+If you want to run it locally (or in your own server), first you need to install
+docker ([docker-compose](https://docs.docker.com/compose/) is also recommeneded).
 
-For all available versions, we provide a [docker-compose](https://docs.docker.com/compose/) configuration file so you can start an OJS stack (web app and database containers) with a single command.
+For all available versions, we provide a **docker-compose** configuration file so
+you can start an OJS stack (web app + database containers) with a single command.
 
 1. Clone this repository in your machine (if you don't like git, [download](https://github.com/pkp/docker-ojs/archive/master.zip) and unzip it):
 
@@ -37,74 +42,80 @@ For all available versions, we provide a [docker-compose](https://docs.docker.co
 	$ https://github.com/pkp/docker-ojs.git
     ```
 
-1. Go to the directory of your OJS version of your choice:
+2. Go to the directory of your OJS version of your choice:
     ```bash
     $ cd versions/3_2_0-1/alpine/apache/php73
     ```
-| **TIP:** In production sites you would like to change the default configuration. The recommended way is uncommenting the environment variable sections in your docker-compose.yml and set the [environment variables](#environment-variables). |
-|:---------------------------------------------------------:|
+| **TIP: Map your config** |
+|:-----------------------------------------------------------------------------------|
+| In production sites you would like to change the default configuration. <br /> The recommended way is uncommenting the environment variable sections in your docker-compose.yml and set the [environment variables](#environment-variables) properly. |
+| More info at ["Easy way to change config stuff"](#easy-way-to-change-config-stuff) |
 
-1. Run the stack:
+3. Run the stack:
     ```bash
     $ docker-compose up
     ```
 
 	Docker-compose will pull images from docker Hub and do all the hard work to rise a functional OJS stack.
 
-1. Access **http://127.0.0.1:8080** and continue through web installation process.
+4. Access **http://127.0.0.1:8080** and continue through web installation process.
 
-   Note that the database connection needs the following options:
+	Note that the database connection needs the following options:
 
-  - **Database driver**: `mysqli`
-  - **Host**: `db` (which is the name of the container in the internal Docker network)
-  - **Username**: `ojs`
-  - **Password**: `ojsPwd`
-  - **Database name**: `ojs`
-  - _Uncheck_ "Create new database"
-  - _Uncheck_ "Beacon"
+	- **Database driver**: `mysqli`
+	- **Host**: `db` (which is the name of the container in the internal Docker network)
+	- **Username**: `ojs`
+	- **Password**: `ojsPwd`
+	- **Database name**: `ojs`
+	- _Uncheck_ "Create new database"
+	- _Uncheck_ "Beacon"
 
-| **TIP:** To go through the OJS installation process automatically, set the environment variable `OJS_CLI_INSTALL=1`, and use the other environment variables to automatize the process. |
-|:---------------------:|
+	| **TIP:**             |
+	|:---------------------|
+	| To go through the OJS installation process automatically, set the environment variable `OJS_CLI_INSTALL=1`, and use the other .env variables to automatize the process. |
 
 ## Building local images
 
-Each version also includes has a file called `docker-compose-local.yml`.
+Each version folder also includes has a file called `docker-compose-local.yml`.
 
-This stack won't ask dockerHub for the required images, it expects you build a docker image locally. It is useful if you don't want external dependencies or you like to modify the offical Dockerfiles to fit your sepecific needs.
+This compose won't ask dockerHub for the required images, it expects you build a docker image locally.
+
+This is useful if you don't want external dependencies or you like to modify our offical Dockerfiles to fit your sepecific needs.
 
 To do this...
 
 1. Go to your prefered version folder and and build the image as follows:
-```bash
-	docker build -t local/ojs:3_2_0-2 .
-```
+	```bash
+	$ docker build -t local/ojs:3_2_0-2 .
+	```
 
-  If something goes wrong, probably it's because you ran the former command with the wrong version number or in a folder without the local Dockerfile.
+  If something goes wrong, double-check if you ran the former command with the right version number or in a folder without the local Dockerfile.
 
-2. Once the image is built, you can run the stack locally telling compose to use the local version with the `-f`/`--file` option as follows:
-```bash
-docker-compose --file docker-compose-local.yml up
-```
-
+2. Once the image is built, you can run the stack locally telling compose to use the local yaml file with the `-f`/`--file` option as follows:
+	```bash
+	$ docker-compose --file docker-compose-local.yml up
+	```
 
 ## Versions
 
 Different OJS versions are combined with different versions of PHP (5 and 7), and different web servers ([Apache HTTP Server](https://httpd.apache.org/), [nginx](https://nginx.org/)).
-_Currently, not all these combinations work! We are mostly focused in Apache. PR are welcome_
+
+_Currently, not all these combinations work! We are mostly focused in Apache2. PR are welcome_
 
 All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/pkpofficial/ojs/tags/).
 If no webserver is mentioned in the tag, then Apache is used.
 
+
 ## Environment Variables
 
-| NAME            | Default   | Info                                                   |
-|:---------------:|:---------:|:------------------------------------------------------:|
+| NAME            | Default   | Info                 |
+|:---------------:|:---------:|:---------------------|
 | SERVERNAME      | localhost | Used to generate httpd.conf and certificate            |
 | OJS_CLI_INSTALL | 0         | Used to install ojs automatically when start container |
-| OJS_DB_HOST     | localhost | Database host                                          |
-| OJS_DB_USER     | ojs       | Database username                                      |
-| OJS_DB_PASSWORD | ojs       | Database password                                      |
-| OJS_DB_NAME     | ojs       | Database name                                          |
+| OJS_DB_HOST     | db        | Database host        |
+| OJS_DB_USER     | ojs       | Database             |
+| OJS_DB_PASSWORD | ojs       | Database password    |
+| OJS_DB_NAME     | ojs       | Database name        |
 
 _**Note:** OJS_CLI_INSTALL and certificate features are underconstruction._
 
@@ -122,7 +133,7 @@ When you run the docker-compose it will mount the volumes with persistent
 data and will let you share files from your host with the container.
 
 | Host									| Container	| Volume								| Description					|
-|:-------------------------------------:|:---------:|:-------------------------------------:|:-----------------------------:|
+|:------------------------------- ------|:---------:|:--------------------------------------|:------------------------------|
 | ./volumes/public						| ojs		| /var/www/html/public					| All public files				|
 | ./volumes/private						| ojs		| /srv/files							| All private files (uploads)	|
 | ./volumes/config/db.charset.conf 		| db		| /etc/mysql/conf.d/charset.cnf			| mariaDB config file 			|
@@ -153,14 +164,14 @@ The update process is easy and straightforward.
    ```bash
    $ docker-compose stop
    ```
-1. **Set the new version** in docker-compose.yml.
+2. **Set the new version** in docker-compose.yml.
  	Replace the old version: ```image: pkpofficial/ojs:2_4_5-2```
 	with the new one:        ```image: pkpofficial/ojs:3_2_0-2```
-1. **Start the container** with the new OJS version. It will pull a new image of your OJS scripts.
+3. **Start the container** with the new OJS version. It will pull a new image of your OJS scripts.
    ```bash
    $ docker-compose up
    ```
-1. **Run the upgrade script** to upgrade the OJS database and files. Easiest was is connecting to your OJS container with [`docker exec`](https://docs.docker.com/engine/reference/commandline/exec/) and run `ojs-upgrade` with this single line:
+4. **Run the upgrade script** to upgrade the OJS database and files. Easiest was is connecting to your OJS container with [`docker exec`](https://docs.docker.com/engine/reference/commandline/exec/) and run `ojs-upgrade` with this single line:
    ```bash
    $ docker exec -it ojs_app_journalname /usr/local/bin/ojs-upgrade
    ```
@@ -175,13 +186,13 @@ Right now the only avaliable stack is Apache2.
 Configuration files and volumes are thought you will work over an apache.
 
 If you want to know how about the fastest method to set your own config,
-jump to the next section "Easy way to change config stuff".
+jump to the next section **["Easy way to change config stuff"](#easy-way-to-change-config-stuff)**.
 
 For those who like to know about the internals, we are now going to dig
 a little bit more in this:
 
 During the image building we ask the Dockerfile to copy the content of
-./templates/webServers/apache/phpVersion/root folder in the root
+`./templates/webServers/apache/phpVersion/root` folder in the root
 of your container.
 
 It means, if you like to add your specific php settings you can do it
@@ -193,7 +204,7 @@ version directory, e.g. `/root/etc/apache2/conf.d/ojs.conf` with your virtualhos
 or `/etc/supervisor.conf`... or, now you know what Dockerfile will do, you
 can add your own.
 
-Again: Note that template's /root folder is copied into the Docker image
+**Again:** Note that template's /root folder is copied into the Docker image
 **at build time** so, if you change it, you must rebuild the image for changes
 to take effect.
 
@@ -262,25 +273,32 @@ Let's say we like us to distribute a "nginx" stack. We have our hands full but
 you know docker and nginx so... ¿how could you contribute?
 
 1. Be sure the version number is in the versions.list file (ie: 3_2_1-0).
-1. Create the required files and folders in the templates folder.
+2. Create the required files and folders in the templates folder.
+
 	 Basically you will need:
+
 		- A Dockerfile template for each php version you publish (ie: dockerfile-alpine-nginx-php73.template)
 		- A generic docker-compose.yml template (templates/dockerComposes/docker-compose-nginx.template)
 		- A folder with all the specific configurations (templates/webServers/nginx/php73/root)
 		- Extend exclude.list with the stuff you want to be removed.
+
 	This is the hard work. Take apache as a reference and contact us if you need indications.
-1. Edit build.sh to add your version to the proper variables.
+
+3. Edit build.sh to add your version to the proper variables.
 	For the nginx exemple (over alpine) it should be enough extending the webServers array:
 	```
 	webServers=(  'apache' 'nginx' )
 	```
 	Modify the script if you need it to be smarter.
-1. Run build script to generate all versions again:
+
+4. Run build script to generate all versions again:
 	```bash
 	$ ./build.sh
 	```
-1. Test your work running docker-compose with local dockerfiles.
-1. Commit a PR with your new build.sh and templates (ignore the versions folder).
+
+5. Test your work running docker-compose with local dockerfiles.
+
+6. Commit a PR with your new build.sh and templates (ignore the versions folder).
 
 
 ## License
