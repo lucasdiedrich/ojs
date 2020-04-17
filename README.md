@@ -23,7 +23,7 @@ Just click the following link and create a user:
 
 Then wait till the containers are built and click in the 8080 port link to get a fresh clean demo with the last stable ojs version.
 
-| **TIP:**                                                                  |
+| **TIP: Old versions on PWD **                                             |
 |:--------------------------------------------------------------------------|
 | Change the version number in [this url](https://labs.play-with-docker.com/?stack=https://raw.githubusercontent.com/pkp/docker-ojs/master/versions/3_2_0-2/alpine/apache/php73/docker-compose.yml) if you want to test an older version. |
 -->
@@ -46,10 +46,10 @@ you can start an OJS stack (web app + database containers) with a single command
     ```bash
     $ cd versions/3_2_0-1/alpine/apache/php73
     ```
-| **TIP: Map your config** |
-|:-----------------------------------------------------------------------------------|
-| In production sites you would like to change the default configuration. <br /> The recommended way is uncommenting the environment variable sections in your docker-compose.yml and set the [environment variables](#environment-variables) properly. |
-| More info at ["Easy way to change config stuff"](#easy-way-to-change-config-stuff) |
+	| **TIP: Map your config** |
+	|:-----------------------------------------------------------------------------------|
+	| In production sites you would like to change the default configuration. <br /> The recommended way is uncommenting the environment variable sections in your docker-compose.yml and set the [environment variables](#environment-variables) properly. |
+	| More info at ["Easy way to change config stuff"](#easy-way-to-change-config-stuff) |
 
 3. Run the stack:
     ```bash
@@ -62,7 +62,7 @@ you can start an OJS stack (web app + database containers) with a single command
 
 	Note that the database connection needs the following options:
 
-	- **Database driver**: `mysqli`
+	- **Database driver**: `mysqli` (or "mysql" if your php is lower than 7.3)
 	- **Host**: `db` (which is the name of the container in the internal Docker network)
 	- **Username**: `ojs`
 	- **Password**: `ojsPwd`
@@ -89,7 +89,7 @@ To do this...
 	$ docker build -t local/ojs:3_2_0-2 .
 	```
 
-  If something goes wrong, double-check if you ran the former command with the right version number or in a folder without the local Dockerfile.
+	If something goes wrong, double-check if you ran the former command with the right version number or in a folder without the local Dockerfile.
 
 2. Once the image is built, you can run the stack locally telling compose to use the local yaml file with the `-f`/`--file` option as follows:
 	```bash
@@ -103,10 +103,13 @@ Different OJS versions are combined with different versions of PHP (5 and 7), an
 _Currently, not all these combinations work! We are mostly focused in Apache2. PR are welcome_
 
 All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/pkpofficial/ojs/tags/).
-If no webserver is mentioned in the tag, then Apache is used.
+
+(If no webserver is mentioned in the tag, then Apache is used).
 
 
 ## Environment Variables
+
+The image undestand the following environment variables:
 
 | NAME            | Default   | Info                 |
 |:---------------:|:---------:|:---------------------|
@@ -122,12 +125,13 @@ _**Note:** OJS_CLI_INSTALL and certificate features are underconstruction._
 ## Special Volumes
 
 Docker content is efimerous by design, but in some situations you would like
-to keep some stuff persistent between docker falls (ie: database content,
+to keep some stuff **persistent** between docker falls (ie: database content,
 upload files, plugin development...)
 
-The version files include some of this folders, but are empty and disabled
-by default. To enable them, **you only need to uncomment the volume lines in
-your docker-compose.yml**.
+By default we include an structure of directories in the version folders
+(see ./volumes), but they are empty and disabled by default in your compose.
+To enable them, **you only need to uncomment the volume lines in
+your docker-compose.yml** and fill the folders properly.
 
 When you run the docker-compose it will mount the volumes with persistent
 data and will let you share files from your host with the container.
@@ -165,8 +169,11 @@ The update process is easy and straightforward.
    $ docker-compose stop
    ```
 2. **Set the new version** in docker-compose.yml.
+
  	Replace the old version: ```image: pkpofficial/ojs:2_4_5-2```
+
 	with the new one:        ```image: pkpofficial/ojs:3_2_0-2```
+
 3. **Start the container** with the new OJS version. It will pull a new image of your OJS scripts.
    ```bash
    $ docker-compose up
@@ -175,23 +182,23 @@ The update process is easy and straightforward.
    ```bash
    $ docker exec -it ojs_app_journalname /usr/local/bin/ojs-upgrade
    ```
-   | **TIP:** Note the name of the OJS container using `docker ps -a`. It should be something like `ojs_app_journalname`|
-   |:----------------------------------------------------------------------------------------:|
+   | **TIP:** Discover your container name? |
+   |:---------------------------------------|
+   | You can see the name of all your containers with `docker ps -a`. The ones related with OJS will be something like `ojs_app_journalname`.|
+   | User grep to filter as follows: ```$ docker ps -a | grep ojs_app```|
 
-Before the upgrade you will like to [diff](https://linux.die.net/man/1/diff) your `config.inc.php` with the version of the new OJS version to learn about new configuration variables.
+Before the upgrade you will like to [diff](https://linux.die.net/man/1/diff) your `config.inc.php` with the version of the new OJS version to learn about new configuration variables. Be specialy carefully with the charsets.
 
 ## Apache2
 
-Right now the only avaliable stack is Apache2.
-Configuration files and volumes are thought you will work over an apache.
+As said, right now the only avaliable stack is Apache2, so configuration files
+and volumes are thought you will work over an apache.
 
-If you want to know how about the fastest method to set your own config,
-jump to the next section **["Easy way to change config stuff"](#easy-way-to-change-config-stuff)**.
+If you want to know the fastest method to set your own config jump to the next
+section **["Easy way to change config stuff"](#easy-way-to-change-config-stuff)**.
 
-For those who like to know about the internals, we are now going to dig
-a little bit more in this:
-
-During the image building we ask the Dockerfile to copy the content of
+For those who like to understand what happens behind the courtains, you need to
+know that during the image building we ask the Dockerfile to copy the content of
 `./templates/webServers/apache/phpVersion/root` folder in the root
 of your container.
 
@@ -275,12 +282,11 @@ you know docker and nginx so... ¿how could you contribute?
 1. Be sure the version number is in the versions.list file (ie: 3_2_1-0).
 2. Create the required files and folders in the templates folder.
 
-	 Basically you will need:
-
-		- A Dockerfile template for each php version you publish (ie: dockerfile-alpine-nginx-php73.template)
-		- A generic docker-compose.yml template (templates/dockerComposes/docker-compose-nginx.template)
-		- A folder with all the specific configurations (templates/webServers/nginx/php73/root)
-		- Extend exclude.list with the stuff you want to be removed.
+  Basically you will need:
+	- A Dockerfile template for each php version you publish (ie: dockerfile-alpine-nginx-php73.template)
+	- A generic docker-compose.yml template (templates/dockerComposes/docker-compose-nginx.template)
+	- A folder with all the specific configurations (templates/webServers/nginx/php73/root)
+	- Extend exclude.list with the stuff you want to be removed.
 
 	This is the hard work. Take apache as a reference and contact us if you need indications.
 
