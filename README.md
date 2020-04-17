@@ -136,8 +136,9 @@ your docker-compose.yml** and fill the folders properly.
 When you run the docker-compose it will mount the volumes with persistent
 data and will let you share files from your host with the container.
 
+
 | Host									| Container	| Volume								| Description					|
-|:------------------------------- ------|:---------:|:--------------------------------------|:------------------------------|
+|:--------------------------------------|:---------:|:--------------------------------------|:------------------------------|
 | ./volumes/public						| ojs		| /var/www/html/public					| All public files				|
 | ./volumes/private						| ojs		| /srv/files							| All private files (uploads)	|
 | ./volumes/config/db.charset.conf 		| db		| /etc/mysql/conf.d/charset.cnf			| mariaDB config file 			|
@@ -151,6 +152,7 @@ data and will let you share files from your host with the container.
 | /etc/localtime						| ojs 		| /etc/localtime						| Sync clock with the host one.	|
 | TBD									| ojs		| /etc/ssl/apache2/server.pem			| SSL **crt** certificate		|
 | TBD									| ojs		| /etc/ssl/apache2/server.key			| SSL **key** certificate		|
+
 
 You can add your own volumes. For instance, make sense for a plugin developer
 or a themer to create a volume with his/her work, to keep a persistent copy in
@@ -184,8 +186,8 @@ The update process is easy and straightforward.
    ```
    | **TIP:** Discover your container name? |
    |:---------------------------------------|
-   | You can see the name of all your containers with `docker ps -a`. The ones related with OJS will be something like `ojs_app_journalname`.|
-   | User grep to filter as follows: ```$ docker ps -a | grep ojs_app```|
+   | You can see the name of all your containers with `docker ps -a`. The ones related with OJS will be something like `ojs_app_journalname`. |
+   | Use grep to filter as follows: `$ docker ps -a | grep ojs_app` |
 
 Before the upgrade you will like to [diff](https://linux.die.net/man/1/diff) your `config.inc.php` with the version of the new OJS version to learn about new configuration variables. Be specialy carefully with the charsets.
 
@@ -288,7 +290,7 @@ you know docker and nginx so... ¿how could you contribute?
 	- A folder with all the specific configurations (templates/webServers/nginx/php73/root)
 	- Extend exclude.list with the stuff you want to be removed.
 
-	This is the hard work. Take apache as a reference and contact us if you need indications.
+  This is the hard work. Take apache as a reference and contact us if you need indications.
 
 3. Edit build.sh to add your version to the proper variables.
 	For the nginx exemple (over alpine) it should be enough extending the webServers array:
