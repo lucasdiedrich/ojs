@@ -18,8 +18,8 @@
 #  ORGANIZATION:  Public Knowledge Project (PKP)
 #       LICENSE:  GPL 3
 #       CREATED:  04/02/2020 23:50:15 CEST
-#       UPDATED:  07/03/2020 01:06:25 CEST
-#      REVISION:  1.1
+#       UPDATED:  }d{
+#      REVISION:  1.2
 #===============================================================================
 
 set -Eeuo pipefail
@@ -190,10 +190,10 @@ for ojs in "${ojsVersions[@]}"; do
 						cp "templates/exclude.list" "versions/$ojsNum/$os/$server/$php/exclude.list"
 
 						# Create persistent folders (with right permissions):
-                                                mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/config"
-                                                echo "Folder to keep persistent your CONFIG files \
-                                                          (uncomment the volume files in docker-compose.yml)" \
-                                                          > "versions/$ojsNum/$os/$server/$php/volumes/config/README"
+						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/config"
+						echo "Folder to keep persistent your CONFIG files \
+							  (uncomment the volume files in docker-compose.yml)" \
+							  > "versions/$ojsNum/$os/$server/$php/volumes/config/README"
 
 						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/private"
 						echo "Folder to keep persistent your PRIVATE files \
@@ -217,10 +217,10 @@ for ojs in "${ojsVersions[@]}"; do
 							  (uncomment the volume docker-compose.yml)" \
 							  > "versions/$ojsNum/$os/$server/$php/volumes/db/README"
 
-                                                mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs/db"
-                                                echo "Folder to keep persistent your DB logs \
-                                                          (uncomment the volume docker-compose.yml)" \
-                                                          > "versions/$ojsNum/$os/$server/$php/volumes/logs/db/README"
+						mkdir -p "versions/$ojsNum/$os/$server/$php/volumes/logs/db"
+						echo "Folder to keep persistent your DB logs \
+							  (uncomment the volume docker-compose.yml)" \
+							  > "versions/$ojsNum/$os/$server/$php/volumes/logs/db/README"
 
 						chown 999:999 "versions/$ojsNum/$os/$server/$php/volumes/logs/db" \
 						              "versions/$ojsNum/$os/$server/$php/volumes/db" -Rf
