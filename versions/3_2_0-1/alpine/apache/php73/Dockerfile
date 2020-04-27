@@ -96,7 +96,7 @@ RUN set -xe \
  	&& curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer.phar \
 	# To avoid timeouts with gitHub we use tokens:
 	# TODO: Replace personal token by an official one.
- 	&& composer.phar config -g github-oauth.github.com 58778f1c172c09f3add6cb559cbadd55de967d47 \
+ 	# && composer.phar config -g github-oauth.github.com 58778f1c172c09f3add6cb559cbadd55de967d47 \
 	# Install Composer Deps:
  	&& composer.phar --working-dir=lib/pkp install --no-dev \
  	&& composer.phar --working-dir=plugins/paymethod/paypal install --no-dev \
@@ -113,10 +113,13 @@ RUN set -xe \
 	&& sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf \
 	&& sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf \
 # Clear the image (list of files to be deleted in exclude.list).
+  && cd /var/www/html \
  	&& rm -rf $(cat /tmp/exclude.list) \
 	&& apk del --no-cache .build-deps \
 	&& rm -rf /tmp/* \
-	&& find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm '{}' \;
+	&& rm -rf /root/.cache/* \
+# Some folders and files will be always removed (.git .github .travis.yml .gitignore .gitmodules)
+	&& find . \( -name .gitignore -o -name .gitmodules -o -name .keepme -o -name .git -o -name .github -o -name .travis.yml \) -exec rm -Rf '{}' \;
 
 COPY root/ /
 

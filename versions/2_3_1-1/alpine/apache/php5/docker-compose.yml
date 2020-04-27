@@ -17,10 +17,10 @@ services:
 #      - .env
     container_name: "ojs_db_${COMPOSE_PROJECT_NAME:-demo}"
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-ojs}"
-      MYSQL_DATABASE: "${MYSQL_DATABASE:-ojs2}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-ojsPwd}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-ojs}"
       MYSQL_USER: "${MYSQL_USER:-ojs}"
-      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-ojs}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-ojsPwd}"
 #    volumes:
 #      - ./volumes/db:/var/lib/mysql
 #      - ./volumes/logs/db:/var/log/mysql
@@ -40,9 +40,8 @@ services:
     ports:
       - "${HTTP_PORT:-8080}:80"
       - "${HTTPS_PORT:-443}:443"
-    volumes:
-      - /etc/localtime:/etc/localtime
-       # Create files or folders first and check permisions, to avoid errors:
+#    volumes:
+#      - /etc/localtime:/etc/localtime
 #      - ./volumes/private:/srv/files
 #      - ./volumes/public:/var/www/html/public
 #      - ./volumes/logs/app:/var/log/apache2
