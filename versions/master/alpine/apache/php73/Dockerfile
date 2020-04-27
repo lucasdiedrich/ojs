@@ -113,13 +113,16 @@ RUN set -xe \
 	&& sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf \
 	&& sed -i -e "s/^ServerSignature.*/ServerSignature Off/" /etc/apache2/httpd.conf \
 # Clear the image (list of files to be deleted in exclude.list).
-  && cd /var/www/html \
+	&& cd /var/www/html \
  	&& rm -rf $(cat /tmp/exclude.list) \
 	&& apk del --no-cache .build-deps \
 	&& rm -rf /tmp/* \
 	&& rm -rf /root/.cache/* \
-# Some folders and files will be always removed (.git .github .travis.yml .gitignore .gitmodules)
-	&& find . \( -name .gitignore -o -name .gitmodules -o -name .keepme -o -name .git -o -name .github -o -name .travis.yml \) -exec rm -Rf '{}' \;
+# Some folders are not required (as .git .travis.yml test .gitignore .gitmodules ...)
+	&& find . -name ".git" -exec rm -Rf '{}' \; \
+	&& find . -name ".travis.yml" -exec rm -Rf '{}' \; \
+	&& find . -name "test" -exec rm -Rf '{}' \; \
+	&& find . \( -name .gitignore -o -name .gitmodules -o -name .keepme \) -exec rm -Rf '{}' \;
 
 COPY root/ /
 
