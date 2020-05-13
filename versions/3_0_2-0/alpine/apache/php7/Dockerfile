@@ -38,6 +38,8 @@ RUN composer update -d lib/pkp --no-dev && \
 RUN mkdir -p /var/www/files /run/apache2  /run/supervisord/ && \
     cp config.TEMPLATE.inc.php config.inc.php && \
     chown -R apache:apache /var/www/* && \
+    # Prepare freefont for captcha 
+	&& ln -s /usr/share/fonts/TTF/FreeSerif.ttf /usr/share/fonts/FreeSerif.ttf \
     # Prepare crontab
     echo "0 * * * *   ojs-run-scheduled" | crontab - && \
     # Prepare httpd.conf
