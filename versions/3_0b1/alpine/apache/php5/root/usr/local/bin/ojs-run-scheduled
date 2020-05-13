@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "[OJS runScheduledTasks] running..."
+php /var/www/html/tools/runScheduledTasks.php

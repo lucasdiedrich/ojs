@@ -1,0 +1,11 @@
+#!/bin/sh
+
+echo "[OJS CLI Install] First time running this container, preparing..."
+echo "127.0.0.1 $SERVERNAME" >> /etc/hosts
+
+echo "[OJS CLI Install] Calling the install using pre-defined variables..."
+
+# For php 5:
+curl "http://${SERVERNAME}/index/install/install" --data "installing=0&adminUsername=admin&adminPassword=admin&adminPassword2=admin&adminEmail=admin%40${SERVERNAME}.org&locale=en_US&additionalLocales%5B%5D=en_US&clientCharset=utf-8&connectionCharset=utf8&databaseCharset=utf8&filesDir=%2Fvar%2Fwww%2Ffiles&databaseDriver=mysql&databaseHost=${OJS_DB_HOST}&databaseUsername=${OJS_DB_USER}&databasePassword=${OJS_DB_PASSWORD}&databaseName=${OJS_DB_NAME}&oaiRepositoryId=${SERVERNAME}&enableBeacon=0" --compressed
+
+echo "[OJS CLI Install] DONE!"

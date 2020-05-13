@@ -1,0 +1,17 @@
+#!/bin/sh
+
+echo "[OJS Upgrade] Changing to installed off"
+#Workarround, to avoid issues if config is a volume:
+cp $OJS_CONF /tmp/config.inc.php
+sed -i '/^installed/c\installed = Off' /tmp/config.inc.php
+cp -f /tmp/config.inc.php $OJS_CONF
+
+echo "[OJS Upgrade] Upgrading..."
+php /var/www/html/tools/upgrade.php upgrade
+
+echo "[OJS Upgrade] Changing to installed on"
+cp $OJS_CONF /tmp/config.inc.php
+sed -i '/^installed/c\installed = On' $OJS_CONF
+cp -f /tmp/config.inc.php $OJS_CONF
+
+echo "[OJS Upgrade] Upgrade is done, please restart the container."
