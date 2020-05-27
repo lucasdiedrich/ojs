@@ -30,6 +30,7 @@ ENV PACKAGES 		\
 	apache2-utils 	\
 	ca-certificates \
 	curl 			\
+	ttf-freefont	\
 	dcron 			\
 	php7			\
 	php7-apache2	\
@@ -107,7 +108,9 @@ RUN set -xe \
  	&& mkdir -p /var/www/files /run/apache2  /run/supervisord/ \
 	&& cp config.TEMPLATE.inc.php config.inc.php \
 	&& chown -R apache:apache /var/www/* \
-# Prepare crontab
+# Prepare freefont for captcha 
+	&& ln -s /usr/share/fonts/TTF/FreeSerif.ttf /usr/share/fonts/FreeSerif.ttf \
+    # Prepare crontab
 	&& echo "0 * * * *   ojs-run-scheduled" | crontab - \
 # Prepare httpd.conf
 	&& sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf \
