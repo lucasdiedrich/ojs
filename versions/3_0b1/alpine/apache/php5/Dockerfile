@@ -100,7 +100,7 @@ RUN set -xe \
 	&& chown -R apache:apache /var/www/* \
 # Prepare freefont for captcha 
 	&& ln -s /usr/share/fonts/TTF/FreeSerif.ttf /usr/share/fonts/FreeSerif.ttf \
-    # Prepare crontab
+# Prepare crontab
 	&& echo "0 * * * *   ojs-run-scheduled" | crontab - \
 # Prepare httpd.conf
 	&& sed -i -e '\#<Directory />#,\#</Directory>#d' /etc/apache2/httpd.conf \
