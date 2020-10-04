@@ -1,0 +1,56 @@
+# File: docker-compose.yml
+# Access via "http://localhost:8081"
+#
+# Call example:
+# $ docker-compose up
+
+version: "3.6"
+
+networks:
+  inside:
+    external: false
+
+services:
+  db:
+    image: mariadb:10.2
+#    env_file:
+#      - .env
+    container_name: "ojs_db_${COMPOSE_PROJECT_NAME:-demo}"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD:-ojsPwd}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE:-ojs}"
+      MYSQL_USER: "${MYSQL_USER:-ojs}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD:-ojsPwd}"
+#    volumes:
+#      - ./volumes/db:/var/lib/mysql
+#      - ./volumes/logs/db:/var/log/mysql
+#      - ./volumes/config/db.charset.conf:/etc/mysql/conf.d/charset.cnf
+#      - ./volumes/migration:/docker-entrypoint-initdb.d
+    networks:
+      - inside
+    restart: always
+
+  ojs:
+    image: local/ojs:3_2_1-1
+#    env_file:
+#      - .env
+    container_name: "ojs_app_${COMPOSE_PROJECT_NAME:-demo}"
+    hostname: "${COMPOSE_PROJECT_NAME:-demo}"
+    restart: always
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+      - "${HTTPS_PORT:-443}:443"
+#    volumes:
+#      - /etc/localtime:/etc/localtime
+#      - ./volumes/private:/srv/files
+#      - ./volumes/public:/var/www/html/public
+#      - ./volumes/logs/app:/var/log/apache2
+#      - ./volumes/config/ojs.config.inc.php:/var/www/html/config.inc.php
+#      - ./volumes/config/apache.htaccess:/var/www/html/.htaccess
+#      - ./volumes/config/php.custom.ini:/usr/local/etc/php/conf.d/custom.ini
+
+    networks:
+      - inside
+    depends_on:
+      - db
+    restart: always
