@@ -31,7 +31,7 @@ Then wait till the containers are built and click in the 8080 port link to get a
 ## How to use
 
 If you want to run it locally (or in your own server), first you need to install
-docker ([docker-compose](https://docs.docker.com/compose/) is also recommeneded).
+docker ([docker-compose](https://docs.docker.com/compose/) is also recommended).
 
 For all available versions, we provide a **docker-compose** configuration file so
 you can start an OJS stack (web app + database containers) with a single command.
@@ -76,15 +76,15 @@ you can start an OJS stack (web app + database containers) with a single command
 
 ## Building local images
 
-Each version folder also includes has a file called `docker-compose-local.yml`.
+Each version folder also includes a file called `docker-compose-local.yml`.
 
 This compose won't ask dockerHub for the required images, it expects you build a docker image locally.
 
-This is useful if you don't want external dependencies or you like to modify our offical Dockerfiles to fit your sepecific needs.
+This is useful if you don't want external dependencies or you like to modify our official Dockerfiles to fit your specific needs.
 
 To do this...
 
-1. Go to your prefered version folder and and build the image as follows:
+1. Go to your preferred version folder and and build the image as follows:
 	```bash
 	$ docker build -t local/ojs:3_2_0-2 .
 	```
@@ -109,7 +109,7 @@ All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/
 
 ## Environment Variables
 
-The image undestand the following environment variables:
+The image understand the following environment variables:
 
 | NAME            | Default   | Info                 |
 |:---------------:|:---------:|:---------------------|
@@ -189,7 +189,7 @@ The update process is easy and straightforward.
    | You can see the name of all your containers with `docker ps -a`. The ones related with OJS will be something like `ojs_app_journalname`. |
    | Use grep to filter as follows: `$ docker ps -a | grep ojs_app` |
 
-Before the upgrade you will like to [diff](https://linux.die.net/man/1/diff) your `config.inc.php` with the version of the new OJS version to learn about new configuration variables. Be specialy carefully with the charsets.
+Before the upgrade you will like to [diff](https://linux.die.net/man/1/diff) your `config.inc.php` with the version of the new OJS version to learn about new configuration variables. Be specially carefully with the charsets.
 
 ## Apache2
 
@@ -199,7 +199,7 @@ and volumes are thought you will work over an apache.
 If you want to know the fastest method to set your own config jump to the next
 section **["Easy way to change config stuff"](#easy-way-to-change-config-stuff)**.
 
-For those who like to understand what happens behind the courtains, you need to
+For those who like to understand what happens behind the curtains, you need to
 know that during the image building we ask the Dockerfile to copy the content of
 `./templates/webServers/apache/phpVersion/root` folder in the root
 of your container.
