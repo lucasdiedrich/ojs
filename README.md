@@ -31,7 +31,7 @@ Then wait till the containers are built and click in the 8080 port link to get a
 ## How to use
 
 If you want to run it locally (or in your own server), first you need to install
-docker ([docker-compose](https://docs.docker.com/compose/) is also recommeneded).
+docker ([docker-compose](https://docs.docker.com/compose/) is also recommended).
 
 For all available versions, we provide a **docker-compose** configuration file so
 you can start an OJS stack (web app + database containers) with a single command.
@@ -76,15 +76,15 @@ you can start an OJS stack (web app + database containers) with a single command
 
 ## Building local images
 
-Each version folder also includes has a file called `docker-compose-local.yml`.
+Each version folder also includes a file called `docker-compose-local.yml`.
 
 This compose won't ask dockerHub for the required images, it expects you build a docker image locally.
 
-This is useful if you don't want external dependencies or you like to modify our offical Dockerfiles to fit your sepecific needs.
+This is useful if you don't want external dependencies or you like to modify our official Dockerfiles to fit your specific needs.
 
 To do this...
 
-1. Go to your prefered version folder and and build the image as follows:
+1. Go to your preferred version folder and and build the image as follows:
 	```bash
 	$ docker build -t local/ojs:3_2_0-2 .
 	```
@@ -109,7 +109,7 @@ All version tags can be found at [Docker Hub Tags tab](https://hub.docker.com/r/
 
 ## Environment Variables
 
-The image undestand the following environment variables:
+The image understand the following environment variables:
 
 | NAME            | Default   | Info                 |
 |:---------------:|:---------:|:---------------------|
@@ -189,11 +189,11 @@ The update process is easy and straightforward.
    | You can see the name of all your containers with `docker ps -a`. The ones related with OJS will be something like `ojs_app_journalname`. |
    | Use grep to filter as follows: `$ docker ps -a | grep ojs_app` |
 
-Before the upgrade you will like to [diff](https://linux.die.net/man/1/diff) your `config.inc.php` with the version of the new OJS version to learn about new configuration variables. Be specialy carefully with the charsets.
+Before the upgrade you will like to [diff](https://linux.die.net/man/1/diff) your `config.inc.php` with the version of the new OJS version to learn about new configuration variables. Be specially carefully with the charsets.
 
 ## Apache2
 
-As said, right now the only avaliable stack is Apache2, so configuration files
+As said, right now the only available stack is Apache2, so configuration files
 and volumes are thought you will work over an apache.
 
 If you want to know the fastest method to set your own config jump to the next
@@ -223,7 +223,7 @@ If you don't want to keep you own local images, you can use the ones we
 build in dockerHub and map your config files in your docker-compose.yml.
 
 So if you like to change something in (for instance) your php settings,
-you only need to created create a `./volumes/config/php.custom.ini`
+you only need to create a `./volumes/config/php.custom.ini`
 outside your container and uncomment the volume in your docker-compose.yml.
 
 Check the volumes section for a list of folders and files we think could
@@ -240,7 +240,7 @@ By default at the start of Apache one script will check if the SSL certificate
 is valid and its CN matches your SERVERNAME, if don't it will generate a new one.
 The certificate can be overwritten using a volume mount (see `docker-compose.yml` file).
 
-_**Note:** This feature is under reveiw and could change in future._
+_**Note:** This feature is under review and could change in future._
 
 
 # How could I help?
@@ -293,7 +293,7 @@ you know docker and nginx so... ¿how could you contribute?
   This is the hard work. Take apache as a reference and contact us if you need indications.
 
 3. Edit build.sh to add your version to the proper variables.
-	For the nginx exemple (over alpine) it should be enough extending the webServers array:
+	For the nginx example (over alpine) it should be enough extending the webServers array:
 	```
 	webServers=(  'apache' 'nginx' )
 	```
